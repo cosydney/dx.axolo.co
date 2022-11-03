@@ -2,6 +2,12 @@ import { createSlice } from '@reduxjs/toolkit'
 
 let initialState = {
   error: false,
+  loading: true,
+  id: '',
+  username: '',
+  name: '',
+  avatarUrl: '',
+  feedData: [],
 }
 
 export const slice = createSlice({

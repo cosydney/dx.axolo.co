@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
-import App from './App.js'
+import SignUp from './App.js'
+import Feed from './components/Feed/index.js'
 import { PrivateRoute } from './components/PrivateRoute'
 
 export default function Root() {
@@ -8,9 +9,9 @@ export default function Root() {
     <div className="">
       <Router>
         <Routes>
-          <Route exact path="/" element={<App />} />
-          <Route exact path="/test" element={<PrivateRoute />}>
-            <Route exact path="/test" element={<App />} />
+          <Route exact path="/" element={<SignUp />} />
+          <Route exact path="/app" element={<PrivateRoute />}>
+            <Route exact path="/app" element={<Feed />} />
           </Route>
           <Route path="*">{/* <Error /> */}</Route>
         </Routes>

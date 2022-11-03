@@ -1,23 +1,18 @@
 import React from 'react'
-import { Layout } from 'antd'
 import InternalAppBody from './internalAppBody'
-// import Header from '../Header/header'
-// import HomeFooter from '../../pages/FooterHomepage/footerHomePage'
-// import { useLocation } from 'react-router'
-// import { useIsAdminUser, useIsEngineer } from '../../utils'
+import { useSelector } from 'react-redux'
+import { User } from '../../reducers/userReducer'
+import LoadingPage from '../LoadingPage'
 
 export default function AppLayout({ children, items }) {
-  // const location = useLocation()
-
-  const isAuthed = true
+  const user = useSelector(User.selectors.selectUser)
+  if (user.loading) return <LoadingPage />
 
   return (
     <div className="">
       <div className="">
-        {/* <Header /> */}
         <main className="">
-          {isAuthed ? <InternalAppBody children={children} /> : null}
-          {/* <HomeFooter /> */}
+          {!user.loading ? <InternalAppBody children={children} /> : null}
         </main>
       </div>
     </div>
