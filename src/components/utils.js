@@ -14,3 +14,7 @@ export const useAxiosWithHeader = () => {
   const jwt = useSelector(User.selectors.selectJWT)
   return createAxios(jwt)
 }
+
+export const classNames = (...classes) => {
+  return classes.filter(Boolean).join(' ')
+}

@@ -1,35 +1,40 @@
-import { URLBACK } from './env'
-import { TwitterOutlined } from '@ant-design/icons'
-import logo from './media/logo/logo_social_archiver_white.png'
+import * as Sentry from '@sentry/react'
+import posthog from 'posthog-js'
+import { Integrations } from '@sentry/tracing'
+import { Login } from './components/login'
+import HomeFooter from './components/homeFooter'
+
+window.$crisp = []
+window.CRISP_WEBSITE_ID = 'e55d5c33-8163-469b-8799-071e4bb34d9f'
+;(function () {
+  var d = document
+  var s = d.createElement('script')
+  s.src = 'https://client.crisp.chat/l.js'
+  s.async = 1
+  d.getElementsByTagName('head')[0].appendChild(s)
+})()
+window.$crisp.push(['safe', true])
+
+if (process.env.NODE_ENV !== 'development') {
+  Sentry.init({
+    dsn: 'https://3af51e4ffe364600a1682a83a3a72413@o992721.ingest.sentry.io/6105769',
+    integrations: [new Integrations.BrowserTracing()],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+  })
+  posthog.init('phc_L9f6Uj1bRNHNEBe4QDQkLwzq8iAtzszkwzrvXw90wjV', {
+    api_host: 'https://app.posthog.com',
+    enable_recording_console_log: true,
+  })
+}
 
 function SignUpPage() {
   return (
-    <div className="flex h-screen w-screen justify-center pt-20 md:items-center md:pt-0">
-      <div className="md:grid md:grid-cols-2 md:gap-4 md:px-10">
-        <div className=" flex flex-shrink-0 items-center justify-center px-4 md:pr-8">
-          <img className="h-40 w-auto md:h-56" src={logo} alt="Your Company" />
-        </div>{' '}
-        <div className="mx-10 md:mx-0 md:self-center">
-          <h1 className="pt-10 text-center text-xl font-bold text-sa-white md:pt-0 md:text-left md:text-2xl">
-            Sign up with Twitter <br />
-            to gain access
-          </h1>{' '}
-          <div className="flex justify-center pt-4 md:justify-start md:pt-4">
-            <button
-              onClick={() => {
-                window.location.assign(`${URLBACK}twitter/connect`)
-              }}
-              className="flex items-center rounded-lg bg-blue-500 font-bold text-sa-white hover:bg-blue-700"
-            >
-              <div className=" flex h-10 items-center  justify-center border-r border-r-blue-600 py-2 px-4">
-                {' '}
-                <TwitterOutlined className="" />
-              </div>{' '}
-              <div className="h-10 py-2 px-4  ">Sign up</div>
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="h-[100vh] bg-white">
+      <Login />
+      <HomeFooter />
     </div>
   )
 }

@@ -15,4 +15,7 @@ export default function messageInteraction({ content, duration = 5, type = 'info
   if (type === 'loading') {
     return message.loading({ className, content, duration })
   }
+  if (type === 'warning') {
+    return message.warning({ className, content, duration })
+  }
 }

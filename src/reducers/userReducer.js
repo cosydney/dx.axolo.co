@@ -7,7 +7,6 @@ let initialState = {
   username: '',
   name: '',
   avatarUrl: '',
-  feedData: [],
 }
 
 export const slice = createSlice({
