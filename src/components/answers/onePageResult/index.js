@@ -35,13 +35,13 @@ export default function OnePageResult() {
   return (
     <MainAppDiv>
       <AppHeader>{capitalize(thisSequence.theme.name)}</AppHeader>
-      {Object.keys(allAnswersPerTopic).map((topic) => {
+      {Object.keys(allAnswersPerTopic).map((topic, i) => {
         return (
-          <div className="">
+          <div className="" key={i}>
             <AppSecondaryHeader>{capitalize(topic)} </AppSecondaryHeader>
-            {Object.keys(allAnswersPerTopic[topic]).map((question) => {
+            {Object.keys(allAnswersPerTopic[topic]).map((question, i) => {
               return (
-                <div className="">
+                <div className="" key={i}>
                   <QuestionHeading>{question}</QuestionHeading>
                   {allAnswersPerTopic[topic][question][0]?.question?.type === 'scale' ? (
                     <ScaleAnswer answers={allAnswersPerTopic[topic][question]} />

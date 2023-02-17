@@ -5,8 +5,6 @@ import { Member } from '../../../reducers/memberReducer'
 export default function TextAnswer({ answers }) {
   const members = useSelector(Member.selectors.getMember)
 
-  console.log('answers,', answers, members)
-
   return (
     <div className="">
       <div className="-my-2 -mx-4 mt-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
