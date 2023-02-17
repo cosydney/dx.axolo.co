@@ -6,13 +6,14 @@ let initialState = {
   loading: true,
   error: false,
   members: [],
+  setting: {},
 }
 
 export const organizationSlice = createSlice({
   name: 'organization',
   initialState,
   reducers: {
-    setData: (state, action) => {
+    updateOrganization: (state, action) => {
       return {
         ...state,
         ...action.payload,
@@ -26,6 +27,8 @@ export const organizationSlice = createSlice({
     builder.addCase(User.actions.logout, (_) => initialState)
   },
 })
+
+export const { updateOrganization } = organizationSlice.actions
 
 const getOrganization = (state) => state.organization
 

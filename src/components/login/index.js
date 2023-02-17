@@ -5,7 +5,7 @@ export const Login = () => {
   return (
     <div className="flex h-[88vh] flex-col justify-center bg-white py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img className="mx-auto h-12 w-auto" src="/logo_axolo.png" alt="Logo Axolo" />
+        <img className="mx-auto h-12 w-auto" src="/logo/22.png" alt="Logo Axolo" />
         <h2 className="text-ourBlack mt-6 text-center text-3xl font-bold">
           Sign in to your account
         </h2>

@@ -2,14 +2,17 @@ import { User } from './userReducer'
 import { createSlice } from '@reduxjs/toolkit'
 
 let initialState = {
-  darkMode: true,
+  launchSequenceDay: 'tuesday',
+  launchSequenceTime: '10:00',
+  followUpReminderPeriodDays: 3,
+  organization: null,
 }
 
 export const settingSlice = createSlice({
   name: 'setting',
   initialState,
   reducers: {
-    setData: (state, action) => {
+    updateSetting: (state, action) => {
       return {
         ...state,
         ...action.payload,
@@ -21,7 +24,7 @@ export const settingSlice = createSlice({
   },
 })
 
-export const { setData } = settingSlice.actions
+export const { updateSetting } = settingSlice.actions
 
 const getSetting = (state) => state.setting
 

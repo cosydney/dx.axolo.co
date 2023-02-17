@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux'
 import { URLBACK } from '../env'
 import { User } from '../reducers/userReducer'
 import axios from 'axios'
+import { updateSetting } from '../reducers/settingReducer'
+import messageInteraction from './messageInteraction'
 
 export function createAxios(jwt) {
   return axios.create({
@@ -10,11 +12,108 @@ export function createAxios(jwt) {
   })
 }
 
-export const useAxiosWithHeader = () => {
+export function useAxiosWithHeader() {
   const jwt = useSelector(User.selectors.selectJWT)
   return createAxios(jwt)
 }
 
 export const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ')
+}
+
+export function AppHeader({ children }) {
+  return (
+    <div className="max-w-7xl">
+      <h1 className="text-2xl font-bold leading-tight tracking-tight text-gray-900">
+        {children}
+      </h1>
+    </div>
+  )
+}
+
+export function AppSubheader({ children }) {
+  return <p className="mt-2  text-sm text-gray-700">{children}</p>
+}
+
+export function AppSecondaryHeader({ children }) {
+  return (
+    <div className="mt-8 max-w-7xl">
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900">
+        {children}
+      </h1>
+    </div>
+  )
+}
+
+export function QuestionHeading({ children }) {
+  return (
+    <div className="mt-8 max-w-7xl">
+      <h1 className="text-lg font-bold leading-tight tracking-tight text-gray-700">
+        {children}
+      </h1>
+    </div>
+  )
+}
+
+export const themeColors = {
+  'code review': { bg: 'blue-100', text: 'blue-800' },
+  testing: { bg: 'green-100', text: 'green-800' },
+  'engineering system': { bg: 'orange-100', text: 'orange-800' },
+  'company organization': { bg: 'red-100', text: 'red-800' },
+}
+
+export const statusColors = {
+  ongoing: { bg: 'blue-100', text: 'blue-800' },
+  completed: { bg: 'green-100', text: 'green-800' },
+}
+
+export async function updateSettingFromApp({
+  key,
+  value,
+  organization,
+  setting,
+  dispatch,
+  axiosWithHeader,
+  user,
+}) {
+  const usersId = organization.users?.map((user) => user.id)
+  if (!usersId.includes(user.id) || setting.id !== organization.setting.id) {
+    messageInteraction({
+      type: 'error',
+      message: 'You are not allowed to update this setting',
+    })
+    return
+  }
+  const oldValue = setting[key]
+  try {
+    dispatch(updateSetting({ ...setting, [key]: value }))
+    await axiosWithHeader.put(`${URLBACK}settings/${setting.id}`, {
+      data: { [key]: value },
+    })
+  } catch (e) {
+    dispatch(updateSetting({ ...setting, [key]: oldValue }))
+    messageInteraction({
+      type: 'error',
+      message: `Error updating your settings: ${key}`,
+    })
+    console.log('Error updating settings', e)
+  }
+}
+
+export const themeOrder = [
+  'code review',
+  'testing',
+  'engineering system',
+  'company organization',
+]
+
+export function sortArrayAfterString(string, array) {
+  const index = array.indexOf(string)
+  if (index === -1) {
+    // string not found in array, return the original array
+    return array
+  }
+  const nextIndex = (index + 1) % array.length // index of the next item, wrapping around to the start if necessary
+  const sortedArray = array.slice(nextIndex).concat(array.slice(0, nextIndex))
+  return sortedArray
 }

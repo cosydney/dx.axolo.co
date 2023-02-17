@@ -15,10 +15,10 @@ export const navigation = [
 export const subNavigation = {
   answers: [{ name: 'Results', route: 'results' }],
   questions: [
-    { name: 'Content', route: 'content' },
     { name: 'Schedule', route: 'schedule' },
+    { name: 'Content', route: 'content' },
   ],
-  team: [{ name: 'Team management', route: 'team-management' }],
+  team: [{ name: 'Manage', route: 'manage' }],
   // admin: [
   //   { name: 'Billing', route: 'billing' },
   //   { name: 'Users', route: 'users' },

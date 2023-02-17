@@ -27,7 +27,7 @@ export default function HeaderMenuDesktop({
                       activePage === item.route
                         ? 'bg-hoverPrimary text-white'
                         : 'text-white hover:bg-hoverPrimary ',
-                      'rounded-md py-2 px-3 text-sm font-medium hover:text-gray-200',
+                      'rounded-md py-2 px-3 text-sm font-medium hover:cursor-pointer hover:text-gray-200',
                     )}
                     onClick={() => {
                       setActivePage(item.route)

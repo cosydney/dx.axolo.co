@@ -1,18 +1,17 @@
 import { Navigate, Outlet } from 'react-router-dom'
 import React from 'react'
 import AppLayout from '../Layout'
+import { useSelector } from 'react-redux'
+import { User } from '../../reducers/userReducer'
 
 export const PrivateRoute = () => {
-  // todo auth
-  const auth = true
-
+  const user = useSelector(User.selectors.selectUser)
+  const auth = user?.jwt?.length > 0
   return auth ? (
     <AppLayout>
-      <h1 className="bg-green-500">coucou test</h1>
-
       <Outlet />
     </AppLayout>
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/" />
   )
 }

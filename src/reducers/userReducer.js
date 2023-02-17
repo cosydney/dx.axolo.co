@@ -7,6 +7,7 @@ let initialState = {
   username: '',
   name: '',
   avatarUrl: '',
+  jwt: null,
 }
 
 export const slice = createSlice({
