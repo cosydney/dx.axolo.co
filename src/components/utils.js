@@ -31,8 +31,12 @@ export function AppHeader({ children }) {
   )
 }
 
-export function AppSubheader({ children }) {
-  return <p className="mt-2  text-sm text-gray-700">{children}</p>
+export function AppSubheader({ children, twCss = '' }) {
+  return (
+    <p className={classNames('mt-2  text-sm text-gray-700', twCss?.length > 0 && twCss)}>
+      {children}
+    </p>
+  )
 }
 
 export function AppSecondaryHeader({ children }) {
@@ -116,4 +120,19 @@ export function sortArrayAfterString(string, array) {
   const nextIndex = (index + 1) % array.length // index of the next item, wrapping around to the start if necessary
   const sortedArray = array.slice(nextIndex).concat(array.slice(0, nextIndex))
   return sortedArray
+}
+
+export function ActionButton({ children, twCss = '', onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={classNames(
+        'inline-flex items-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-hoverPrimary focus:outline-none focus:ring-2 focus:ring-hoverPrimary focus:ring-offset-2',
+        twCss?.length > 0 && twCss,
+      )}
+    >
+      {children}
+    </button>
+  )
 }

@@ -7,8 +7,6 @@ import ScaleBarChart from './scaleBarChart'
 const chartContainerCss = 'h-56 my-10'
 
 export default function ScaleAnswer({ answers }) {
-  const members = useSelector(Member.selectors.getMember)
-
   const data = []
 
   for (const answer of answers) {

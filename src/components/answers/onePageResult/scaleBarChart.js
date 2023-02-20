@@ -18,7 +18,6 @@ export default function ScaleBarChart({ data }) {
 
   const renderTooltip = (props) => {
     const intAnswer = props.label
-    console.log('props,', intAnswer, data)
     const answeredByIds = data
       ?.find((d) => d.intAnswer === intAnswer)
       ?.originalAnswers.map((a) => a.answeredBy)

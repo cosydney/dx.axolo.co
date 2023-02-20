@@ -21,6 +21,7 @@ export default function UpcomingSequences() {
   const questionByTheme = groupBy(questions?.list, 'topic.theme.name')
 
   const sortedTheme = sortArrayAfterString(latestSequences?.theme?.name, themeOrder)
+  sortedTheme.push(...sortedTheme)
 
   const arrayHourAndMinute = setting.launchSequenceTime?.split(':')
   const nextSequenceDate = moment()
@@ -80,7 +81,7 @@ export default function UpcomingSequences() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           On{' '}
                           {nextSequenceDate
-                            ?.add(i, 'weeks')
+                            ?.add(1, 'weeks')
                             ?.format('dddd, MMMM Do YYYY, h:mm a')}
                         </td>
 

@@ -1,26 +1,10 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
-import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { classNames } from '../utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { Organization } from '../../reducers/organizationReducer'
-
-const DocumentationButton = () => {
-  return (
-    <a
-      href="https://axolo.co/docs"
-      target="_blank"
-      rel="noreferrer"
-      className={classNames(
-        'rounded-md py-2 px-3 text-sm font-medium text-white hover:text-gray-200',
-      )}
-    >
-      <div className="flex">
-        Documentation <ArrowTopRightOnSquareIcon className="ml-2 mt-1 w-4" />
-      </div>
-    </a>
-  )
-}
+import ModalFeedback from '../modalFeedback.js'
+import { ChatBubbleLeftIcon } from '@heroicons/react/24/outline'
 
 // menu top right of desktop view
 export default function UserDropdown({
@@ -33,14 +17,35 @@ export default function UserDropdown({
   const dispatch = useDispatch()
   const organization = useSelector(Organization.selectors.getOrganization)
   const orgName = organization?.providerLogin
+  const [open, setOpen] = useState(false)
+
+  const FeedbackButton = () => {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className={classNames(
+          'rounded-md py-2 px-3 text-sm font-medium text-white hover:text-gray-200',
+        )}
+      >
+        <div className="flex text-sm ">
+          Share feedback <ChatBubbleLeftIcon className="ml-2 -mt-0.5 w-4" />
+        </div>
+      </button>
+    )
+  }
 
   return (
     <div className="hidden lg:ml-4 lg:block">
       {/* Profile dropdown and documentation button */}
-
+      <ModalFeedback
+        open={open}
+        setOpen={setOpen}
+        modalTitle="Share feedback"
+        modalText="Your feedback is important to us. Please let us know what you would like to see in the future."
+      />
       <div className="flex items-center">
         {/* Hide documentation button if not onboarded */}
-        {/* {isOnboarded ? <DocumentationButton /> : null} */}
+        {isOnboarded ? <FeedbackButton /> : null}
         <Menu as="div" className="relative z-50 ml-3 flex">
           <div>
             <Menu.Button className="flex rounded-full bg-primary text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary">

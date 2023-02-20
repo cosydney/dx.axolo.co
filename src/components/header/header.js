@@ -10,8 +10,10 @@ import UserDropdown from './userDropDownDesktop'
 import MobileOpenedMenu from './mobileOpenedMenu'
 import HeaderMenuDesktop from './headerMenuDesktop'
 import SubHeaderMenuDesktop from './subHeaderMenuDesktop'
+import ModalFeedback from '../modalFeedback.js'
 
 export default function Header() {
+  const [open, setOpen] = useState(false)
   const organization = useSelector(Organization.selectors.getOrganization)
   const user = useSelector(User.selectors.selectUser)
   let avatar =
@@ -21,8 +23,7 @@ export default function Header() {
   }
 
   const [avatarUrl, setAvatarUrl] = useState(avatar)
-  const orgName =
-    organization?.providerLogin || user?.credential?.teamName || 'Onboarding'
+  const orgName = organization?.name || 'Onboarding'
   const navigate = useNavigate()
   const userNavigation = userMenu(orgName)
 
@@ -63,6 +64,12 @@ export default function Header() {
   return (
     <>
       <div className="min-h-full">
+        <ModalFeedback
+          open={open}
+          setOpen={setOpen}
+          modalTitle="Feedback"
+          modalText="Your feedback is important to us. Please let us know what you would like to see in the future."
+        />
         <div className="bg-primary pb-32">
           <Disclosure
             as="nav"

@@ -60,10 +60,10 @@ export default function QuestionsTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {Object.keys(questionByThemeThenTopic).map((theme) => (
-                  <Fragment key={theme}>
-                    {Object.keys(questionByThemeThenTopic[theme]).map((topic) => (
-                      <Fragment key={topic}>
+                {Object.keys(questionByThemeThenTopic).map((theme, i) => (
+                  <Fragment key={i}>
+                    {Object.keys(questionByThemeThenTopic[theme]).map((topic, j) => (
+                      <Fragment key={j}>
                         <tr className="border-t border-gray-200">
                           <th
                             colSpan={5}
@@ -73,30 +73,32 @@ export default function QuestionsTable() {
                             {capitalize(topic)}
                           </th>
                         </tr>
-                        {questionByThemeThenTopic?.[theme]?.[topic]?.map((question) => (
-                          <tr key={question.email}>
-                            <td className="    max-w-[600px] pl-4 text-left text-sm font-medium sm:pl-6  ">
-                              <p className=" ml-4 font-medium text-gray-500">
-                                {question.text}
-                              </p>
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              <QuestionStyle style={question.type} />
-                            </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                              <ThemeBadge name={theme} />
-                            </td>
-                            <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
-                              <a
-                                href="#"
-                                className="text-indigo-600 hover:text-indigo-900"
-                              >
-                                ... todo
-                                <span className="sr-only">, {question.name}</span>
-                              </a>
-                            </td>
-                          </tr>
-                        ))}
+                        {questionByThemeThenTopic?.[theme]?.[topic]?.map(
+                          (question, k) => (
+                            <tr key={k}>
+                              <td className="    max-w-[600px] pl-4 text-left text-sm font-medium sm:pl-6  ">
+                                <p className=" ml-4 font-medium text-gray-500">
+                                  {question.text}
+                                </p>
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <QuestionStyle style={question.type} />
+                              </td>
+                              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                <ThemeBadge name={theme} />
+                              </td>
+                              <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
+                                <a
+                                  href="#"
+                                  className="text-indigo-600 hover:text-indigo-900"
+                                >
+                                  ... todo
+                                  <span className="sr-only">, {question.name}</span>
+                                </a>
+                              </td>
+                            </tr>
+                          ),
+                        )}
                       </Fragment>
                     ))}
                   </Fragment>

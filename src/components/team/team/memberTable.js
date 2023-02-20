@@ -27,6 +27,10 @@ export default function MemberSettingTable() {
   })
   const [memberData, setMemberData] = useState(sortedMembers)
 
+  useEffect(() => {
+    setMemberData(sortedMembers)
+  }, [members?.list])
+
   const StatusBadgeMember = ({ isActive }) => {
     return (
       <span
@@ -49,15 +53,16 @@ export default function MemberSettingTable() {
       type: 'loading',
     })
     try {
-      await axios.put(
-        `${URLBACK}members/onoffboard?orgId=${organization.id}&memberId=${person.id}&action=${action}`,
-      )
       const newMemberState = cloneDeep(members)
       const memberIndex = map(newMemberState.list, 'id').indexOf(person.id)
       newMemberState.list[memberIndex].isActive = !person.isActive
       dispatch(updateMember({ ...newMemberState }))
+      await axios.put(
+        `${URLBACK}members/onoffboard?orgId=${organization.id}&memberId=${person.id}&action=${action}`,
+      )
       hide()
     } catch (e) {
+      dispatch(updateMember({ ...members }))
       hide()
       console.log(`Error ${action}ing ${person.username}: ${e.message}, ${e}`)
       messageInteraction({
