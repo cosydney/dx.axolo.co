@@ -12,6 +12,8 @@ import { updateMember } from '../../reducers/memberReducer'
 import { updateOrganization } from '../../reducers/organizationReducer'
 import { updateSequence } from '../../reducers/sequenceReducer'
 import { updateQuestion } from '../../reducers/questionReducer'
+import { updateCurrentSequence } from '../../reducers/currentSequenceReducer'
+import { userNeedsToAnswerSurvey } from '../utils'
 
 export default function SlackAuth() {
   const location = useLocation()
@@ -38,6 +40,13 @@ export default function SlackAuth() {
       dispatch(updateSequence({ list: sequences }))
       dispatch(updateQuestion({ list: allQuestions }))
 
+      const needsToAnswer = userNeedsToAnswerSurvey(user)
+      if (needsToAnswer) {
+        const questionsOfCurrentSequence = allQuestions.filter(
+          (q) => q.topic?.theme?.id === user?.surveyRequests?.[0]?.sequence?.theme?.id,
+        )
+        dispatch(updateCurrentSequence({ questions: questionsOfCurrentSequence }))
+      }
       // window.$crisp.push(['set', 'user:email', user.email])
       // window.analytics.identify(user.email, {
       //   name: user.name,

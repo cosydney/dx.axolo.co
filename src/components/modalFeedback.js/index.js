@@ -3,13 +3,11 @@ import axios from 'axios'
 import { Dialog, Transition } from '@headlessui/react'
 import { ChatBubbleLeftIcon } from '@heroicons/react/24/outline'
 import messageInteraction from '../messageInteraction'
-import { REACT_APP_DX_BOT_SLACK_HOOK_URL, URLBACK } from '../../env'
+import { URLBACK } from '../../env'
 import { useSelector } from 'react-redux'
 import { User } from '../../reducers/userReducer'
 import { Organization } from '../../reducers/organizationReducer'
 import { Member } from '../../reducers/memberReducer'
-
-const slackHookUrl = REACT_APP_DX_BOT_SLACK_HOOK_URL
 
 export default function ModalFeedback({
   open,
@@ -35,7 +33,7 @@ export default function ModalFeedback({
       const activeMembers = members?.list?.filter((member) => member.isActive)?.length
       const message = `${user.email}, from ${organization.name} with ${activeMembers}/${members?.list?.length} Slack users sent a feedback:\\n${textValue}`
       await axios.post(
-        `${URLBACK}send-internal-message?text=${message}&slackUrl=${slackHookUrl}`,
+        `${URLBACK}send-internal-message?text=${message}&slackChannel=dx-bot`,
       )
       messageInteraction({
         type: 'success',

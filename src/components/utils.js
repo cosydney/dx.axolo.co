@@ -60,10 +60,10 @@ export function QuestionHeading({ children }) {
 }
 
 export const themeColors = {
-  'code review': { bg: 'blue-100', text: 'blue-800' },
-  testing: { bg: 'green-100', text: 'green-800' },
-  'engineering system': { bg: 'orange-100', text: 'orange-800' },
-  'company organization': { bg: 'red-100', text: 'red-800' },
+  'code review': { bg: 'bg-blue-100', text: 'text-blue-800' },
+  testing: { bg: 'bg-green-100', text: 'text-green-800' },
+  'engineering system': { bg: 'bg-orange-100', text: 'text-orange-800' },
+  'company organization': { bg: 'bg-red-100', text: 'text-red-800' },
 }
 
 export const statusColors = {
@@ -106,8 +106,8 @@ export async function updateSettingFromApp({
 
 export const themeOrder = [
   'code review',
-  'testing',
   'engineering system',
+  'testing',
   'company organization',
 ]
 
@@ -135,4 +135,14 @@ export function ActionButton({ children, twCss = '', onClick }) {
       {children}
     </button>
   )
+}
+
+export function userNeedsToAnswerSurvey(user) {
+  const { surveyRequests } = user
+  // the backend sends the latest survey request first
+  const latestSurveyRequest = surveyRequests?.[0]
+  // if user needs to answer a sequence
+  if (!latestSurveyRequest.answered & (latestSurveyRequest.sequence.status === 'ongoing'))
+    return true
+  return false
 }

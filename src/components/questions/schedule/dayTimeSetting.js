@@ -62,6 +62,7 @@ export default function DayTimeSetting() {
           format={format}
           onChange={onChangeTime}
           value={dayjs(selectedTime, format)}
+          minuteStep={15}
         />
       </div>
     </div>
