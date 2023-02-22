@@ -47,12 +47,14 @@ export default function QuestionContainer() {
     // if the sequence is completed
     if (step === totalSteps) {
       const updatedSurveyRequests = cloneDeep(user.surveyRequests)
-      updatedSurveyRequests[0].answered = true
-      dispatch(updateUser({ ...user, surveyRequests: updatedSurveyRequests }))
-      messageInteraction({
-        type: 'success',
-        content: 'You have completed the survey! 🥳 Thank you.',
-      })
+      if (updatedSurveyRequests && updatedSurveyRequests.length > 0) {
+        updatedSurveyRequests[0].answered = true
+        dispatch(updateUser({ ...user, surveyRequests: updatedSurveyRequests }))
+        messageInteraction({
+          type: 'success',
+          content: 'You have completed the survey! 🥳 Thank you.',
+        })
+      }
     }
     setCompletionbar(completion)
   }, [step])

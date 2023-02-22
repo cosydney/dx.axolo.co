@@ -92,6 +92,7 @@ export default function SlackAuth({ type = 'slack' }) {
       }
     } catch (e) {
       console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
+      console.log(e)
       if (
         e?.response?.data?.message?.[0]?.messages[0]?.id ===
         'Auth.form.error.email.taken.username'
