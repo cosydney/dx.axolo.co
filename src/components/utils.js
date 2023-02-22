@@ -142,7 +142,7 @@ export function userNeedsToAnswerSurvey(user) {
   // the backend sends the latest survey request first
   const latestSurveyRequest = surveyRequests?.[0]
   // if user needs to answer a sequence
-  if (!latestSurveyRequest.answered & (latestSurveyRequest.sequence.status === 'ongoing'))
-    return true
-  return false
+  if (latestSurveyRequest.answered || latestSurveyRequest.sequence.status === 'completed')
+    return false
+  return true
 }

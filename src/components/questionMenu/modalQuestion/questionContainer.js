@@ -14,14 +14,16 @@ import { ArrowSmallRightIcon } from '@heroicons/react/24/outline'
 import { useAxiosWithHeader } from '../../utils'
 import { URLBACK } from '../../../env'
 import { Organization } from '../../../reducers/organizationReducer'
+import messageInteraction from '../../messageInteraction'
+import { updateUser, User } from '../../../reducers/userReducer'
 
 export default function QuestionContainer() {
   const organization = useSelector(Organization.selectors.getOrganization)
+  const user = useSelector(User.selectors.selectUser)
   const currentSequence = useSelector(CurrentSequence.selectors.getCurrentSequence)
   const [textValue, setTextValue] = useState('')
   const [rating, setRating] = useState(0)
   const dispatch = useDispatch()
-
   const axios = useAxiosWithHeader()
 
   const handleRating = (newRating) => {
@@ -29,7 +31,8 @@ export default function QuestionContainer() {
   }
 
   const { step, questions } = currentSequence
-  let completion = step / questions.length
+  const totalSteps = currentSequence?.questions?.length
+  let completion = (step / questions.length) * 100
   if (completion === 0) {
     completion = 10
   }
@@ -37,9 +40,19 @@ export default function QuestionContainer() {
   const [completionBar, setCompletionbar] = useState(completion)
 
   useEffect(() => {
-    completion = step / questions.length
+    completion = (step / questions.length) * 100
     if (completion === 0) {
       completion = 10
+    }
+    // if the sequence is completed
+    if (step === totalSteps) {
+      const updatedSurveyRequests = cloneDeep(user.surveyRequests)
+      updatedSurveyRequests[0].answered = true
+      dispatch(updateUser({ ...user, surveyRequests: updatedSurveyRequests }))
+      messageInteraction({
+        type: 'success',
+        content: 'You have completed the survey! 🥳 Thank you.',
+      })
     }
     setCompletionbar(completion)
   }, [step])
@@ -55,21 +68,42 @@ export default function QuestionContainer() {
     )
   }
 
-  const TextInputQuestion = () => {
+  const TextInputQuestion = ({ step }) => {
     return (
       <div className="mt-4">
         <textarea
           rows={4}
           name="text-input-question"
+          /* todo this could be improved: ref & onFocus. I lost focus at each render,so I needed to do this
+           ** it seems to be slowing the input field.
+           */
+          ref={(ref) => ref && ref.focus()}
+          onFocus={(e) =>
+            e.currentTarget.setSelectionRange(
+              e.currentTarget.value.length,
+              e.currentTarget.value.length,
+            )
+          }
+          key={'text-input-question' + step}
           id="text-input-question"
           className="block max-h-28 w-full rounded-md border border-gray-300 p-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-          value={textValue}
           onChange={(e) => setTextValue(e.target.value)}
+          value={textValue}
         />
       </div>
     )
   }
   async function clickOnNextQuestion() {
+    if (
+      (questionType === 'scale' && rating === 0) ||
+      (questionType === 'text' && textValue === '')
+    ) {
+      messageInteraction({
+        type: 'warning',
+        content: 'Please answer the question before continuing.',
+      })
+      return
+    }
     try {
       await axios.post(
         `${URLBACK}answers/user-answers-from-app?orgId=${organization.id}`,
@@ -77,6 +111,11 @@ export default function QuestionContainer() {
           questionId: currentSequence?.questions?.[step]?.id,
           answer: questionType === 'scale' ? rating : textValue,
           type: questionType,
+          step,
+          totalSteps,
+          surveyRequestId: user?.surveyRequests?.[0]?.id,
+          sequenceId: currentSequence.id,
+          topic: currentSequence?.questions?.[step]?.topic?.id,
         },
       )
       setTextValue('')
@@ -119,7 +158,11 @@ export default function QuestionContainer() {
             </div>
           </div>
           <div className="mt-6 h-40 w-full ">
-            {questionType === 'scale' ? <ScaleQuestion /> : <TextInputQuestion />}
+            {questionType === 'scale' ? (
+              <ScaleQuestion />
+            ) : (
+              <TextInputQuestion step={step} />
+            )}
           </div>
         </div>
       </div>
@@ -127,7 +170,7 @@ export default function QuestionContainer() {
         <div className="mt-5  sm:mt-6">
           <button
             type="button"
-            className="flex items-center text-sm text-gray-500"
+            className="flex items-center text-sm text-gray-500 focus:ring-0"
             onClick={() => clickOnNextQuestion()}
           >
             Next <ArrowSmallRightIcon className="ml-2 h-4 w-4" />

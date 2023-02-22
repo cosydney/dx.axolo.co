@@ -1,15 +1,16 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { User } from '../../../reducers/userReducer'
 import { useSelector } from 'react-redux'
 import { userNeedsToAnswerSurvey } from '../../utils'
 import QuestionContainer from './questionContainer'
+import { useEffectOnce } from 'react-use'
 
 export default function ModalQuestion() {
   const user = useSelector(User.selectors.selectUser)
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
+  useEffectOnce(() => {
     const needsToAnswer = userNeedsToAnswerSurvey(user)
     setOpen(needsToAnswer)
   }, [user?.surveyRequests?.[0]])

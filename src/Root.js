@@ -12,7 +12,7 @@ import TeamSetting from './components/team/team/index.js'
 
 export default function Root() {
   return (
-    <div className="">
+    <div className="w-[100vw]">
       <Router>
         <Routes>
           <Route exact path="/" element={<SignUp />} />
