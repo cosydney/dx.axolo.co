@@ -17,12 +17,12 @@ export default function ScaleBarChart({ data }) {
   const members = useSelector(Member.selectors.getMember)
 
   const renderTooltip = (props) => {
-    const intAnswer = props.label
+    const intAnswer = props?.label
     const answeredByIds = data
-      ?.find((d) => d.intAnswer === intAnswer)
-      ?.originalAnswers.map((a) => a.answeredBy)
+      ?.find((d) => d?.intAnswer === intAnswer)
+      ?.originalAnswers?.map((a) => a?.answeredBy)
     const answeredBy = answeredByIds?.map(({ id }) =>
-      members?.list?.find((m) => m.id === id),
+      members?.list?.find((m) => m?.id === id),
     )
     if (!(answeredBy?.length > 0)) return null
 
@@ -35,11 +35,11 @@ export default function ScaleBarChart({ data }) {
         {answeredBy?.map((member) => (
           <div className="flex items-center  ">
             <div className="h-10 w-10 flex-shrink-0 ">
-              <img className="h-10 w-10 rounded-full" src={member.avatarUrl} alt="" />
+              <img className="h-10 w-10 rounded-full" src={member?.avatarUrl} alt="" />
             </div>
             <div className="ml-4 ">
-              <div className="font-medium text-gray-900">{member.username}</div>
-              <div className="text-gray-500">{member.email}</div>
+              <div className="font-medium text-gray-900">{member?.username}</div>
+              <div className="text-gray-500">{member?.email}</div>
             </div>
           </div>
         ))}

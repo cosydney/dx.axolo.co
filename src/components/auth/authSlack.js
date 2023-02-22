@@ -12,6 +12,24 @@ import { updateMember } from '../../reducers/memberReducer'
 import { updateOrganization } from '../../reducers/organizationReducer'
 import { updateSequence } from '../../reducers/sequenceReducer'
 import { updateQuestion } from '../../reducers/questionReducer'
+import { updateCurrentSequence } from '../../reducers/currentSequenceReducer'
+import { userNeedsToAnswerSurvey } from '../utils'
+import { cloneDeep } from 'lodash'
+
+function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
+  const questionsOfCurrentSequence = cloneDeep(
+    allQuestions.filter(
+      (q) => q.topic?.theme?.id === user?.surveyRequests?.[0]?.sequence?.theme?.id,
+    ),
+  )
+  for (let i = 0; i < questionsOfCurrentSequence.length; i++) {
+    questionsOfCurrentSequence[i].sequence = user?.surveyRequests?.[0]?.sequence
+  }
+  const previousAnswersOfThisUsers = sequences?.[0]?.answers?.filter(
+    (a) => a.answeredBy.id === user.id,
+  )
+  return previousAnswersOfThisUsers?.length || 0
+}
 
 export default function SlackAuth() {
   const location = useLocation()
@@ -38,13 +56,38 @@ export default function SlackAuth() {
       dispatch(updateSequence({ list: sequences }))
       dispatch(updateQuestion({ list: allQuestions }))
 
+      const needsToAnswer = userNeedsToAnswerSurvey(user)
+      if (needsToAnswer) {
+        const questionsOfCurrentSequence = cloneDeep(
+          allQuestions.filter(
+            (q) => q.topic?.theme?.id === user?.surveyRequests?.[0]?.sequence?.theme?.id,
+          ),
+        )
+        const step = findCurrentStepIfAlreadySomeAnswers({
+          allQuestions,
+          user,
+          sequences,
+        })
+        dispatch(
+          updateCurrentSequence({
+            questions: questionsOfCurrentSequence,
+            step,
+            id: user?.surveyRequests?.[0]?.sequence?.id,
+          }),
+        )
+      }
       // window.$crisp.push(['set', 'user:email', user.email])
       // window.analytics.identify(user.email, {
       //   name: user.name,
       //   email: user.email,
       // })
 
-      navigate('/answers/results')
+      const onboardedMembers = members.filter((m) => m.isActive)
+      if (!(onboardedMembers?.length > 0)) {
+        navigate('/team/manage')
+      } else {
+        navigate('/answers/results')
+      }
     } catch (e) {
       console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
       if (
