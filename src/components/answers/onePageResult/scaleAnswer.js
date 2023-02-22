@@ -1,7 +1,4 @@
-import { findIndex, findKey } from 'lodash'
-import moment from 'moment'
-import { useSelector } from 'react-redux'
-import { Member } from '../../../reducers/memberReducer'
+import { findIndex } from 'lodash'
 import ScaleBarChart from './scaleBarChart'
 
 const chartContainerCss = 'h-56 my-10'
@@ -25,14 +22,10 @@ export default function ScaleAnswer({ answers }) {
       }
     }
   }
-
-  // sort data array by the property intAnswer
-  data.sort((a, b) => a.intAnswer - b.intAnswer)
-
   // todo could be improved and doing it in the step before if we do not find the number in intAnswers
   // if we do not find an answer, we need to artificially add it in our data array to show that it's empty
   for (let i = 1; i <= 5; i += 1) {
-    if (!data.find((d) => d.intAnswer === i)) {
+    if (!data.find((d) => d?.intAnswer === i)) {
       data.splice(i, 0, {
         intAnswer: i,
         count: 0,
@@ -41,9 +34,13 @@ export default function ScaleAnswer({ answers }) {
     }
   }
 
+  // sort data array by the property intAnswer
+  data.sort((a, b) => a.intAnswer - b.intAnswer)
+
   return (
-    <div className="">
-      <div className="grid  grid-cols-2 gap-8">
+    <div className="flex justify-center">
+      <div className=" max-h-[300px] w-[300px]">
+        {/* when we also have the historic view  className="grid  grid-cols-2 gap-8" */}
         <div className={chartContainerCss}>
           <ScaleBarChart data={data} />
         </div>

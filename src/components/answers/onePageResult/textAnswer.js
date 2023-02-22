@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Member } from '../../../reducers/memberReducer'
 
 export default function TextAnswer({ answers }) {
-  const members = useSelector(Member.selectors.getMember)
+  const members = useSelector(Member?.selectors.getMember)
 
   return (
     <div className="">
@@ -35,7 +35,9 @@ export default function TextAnswer({ answers }) {
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
                 {answers?.map((answer) => {
-                  const member = members?.list?.find((m) => m.id === answer.answeredBy.id)
+                  const member = members?.list?.find(
+                    (m) => m.id === answer?.answeredBy?.id,
+                  )
                   return (
                     <tr key={answer.id}>
                       <td className="relative whitespace-nowrap pl-4  text-left text-sm font-medium sm:pl-6 ">
@@ -43,15 +45,15 @@ export default function TextAnswer({ answers }) {
                           <div className="h-10 w-10 flex-shrink-0 ">
                             <img
                               className="h-10 w-10 rounded-full"
-                              src={member.avatarUrl}
+                              src={member?.avatarUrl}
                               alt=""
                             />
                           </div>
                           <div className="ml-4 ">
                             <div className="font-medium text-gray-900">
-                              {member.username}
+                              {member?.username}
                             </div>
-                            <div className="text-gray-500">{member.email}</div>
+                            <div className="text-gray-500">{member?.email}</div>
                           </div>
                         </div>
                       </td>

@@ -1,3 +1,4 @@
+import { cloneDeep } from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -10,6 +11,8 @@ import ThemeBadge from './themeBadge'
 export default function SequenceTable() {
   const navigate = useNavigate()
   const sequences = useSelector(Sequence.selectors.getSequence)
+  const sortedSequences = cloneDeep(sequences?.list)
+  sortedSequences.reverse()
 
   return (
     <div className="">
@@ -50,7 +53,7 @@ export default function SequenceTable() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {sequences?.list?.map((sequence, i) => {
+                  {sortedSequences?.map((sequence, i) => {
                     const surveySent = sequence.surveyRequests?.length
                     const surveyAnswered = sequence.surveyRequests?.filter(
                       (survey) => survey.answered,
