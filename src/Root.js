@@ -17,6 +17,7 @@ export default function Root() {
         <Routes>
           <Route exact path="/" element={<SignUp />} />
           <Route exact path="/auth/slack/callback" element={<SlackAuth />} />
+          <Route exact path="/testaccount" element={<SlackAuth type={'dummy'} />} />
 
           <Route exact path="/answers/results" element={<PrivateRoute />}>
             <Route exact path="/answers/results" element={<QuestionResults />} />
