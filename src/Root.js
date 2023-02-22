@@ -9,7 +9,6 @@ import { PrivateRoute } from './components/PrivateRoute'
 import ManageContentQuestions from './components/questions/content/index.js'
 import ScheduleQuestions from './components/questions/schedule/index.js'
 import TeamSetting from './components/team/team/index.js'
-import AuthDummy from './components/auth/authDummy.js'
 
 export default function Root() {
   return (
