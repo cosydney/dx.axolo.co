@@ -31,7 +31,7 @@ function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) 
   return previousAnswersOfThisUsers?.length || 0
 }
 
-export default function SlackAuth() {
+export default function SlackAuth({ type = 'slack' }) {
   const location = useLocation()
   const dispatch = useDispatch()
   const [error, setError] = useState(false)
@@ -39,9 +39,11 @@ export default function SlackAuth() {
 
   const loggingUser = async () => {
     try {
-      const { data, status } = await Axios.get(
-        `${URLBACK}services/auth/slack/callback${location.search}`,
-      )
+      let authUrl = `${URLBACK}services/auth/slack/callback${location.search}`
+      if (type === 'dummy') {
+        authUrl = `${URLBACK}services/auth/testAccount/callback`
+      }
+      const { data, status } = await Axios.get(authUrl)
       const { user, jwt, organization, setting, members, sequences, allQuestions } = data
       if (status !== 200) {
         console.log('STATUS NOT 200', status, data)
