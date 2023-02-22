@@ -82,7 +82,12 @@ export default function SlackAuth() {
       //   email: user.email,
       // })
 
-      navigate('/answers/results')
+      const onboardedMembers = members.filter((m) => m.isActive)
+      if (!(onboardedMembers?.length > 0)) {
+        navigate('/team/manage')
+      } else {
+        navigate('/answers/results')
+      }
     } catch (e) {
       console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
       if (
