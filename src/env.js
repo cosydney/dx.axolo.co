@@ -1,9 +1,11 @@
 export const URLFRONT =
-  process.env.NODE_ENV === 'production' ? 'https://dx.axolo.co' : 'http://localhost:3000/'
+  process.env.NODE_ENV === 'production'
+    ? 'https://dx.axolo.co/'
+    : 'http://localhost:3000/'
 
 export const URLBACK =
   process.env.NODE_ENV === 'production'
-    ? 'https://dxapi.axolo.co'
+    ? 'https://api.dx.axolo.co/api/'
     : `${process.env.REACT_APP_URLBACK}api/`
 
 export const REACT_APP_DX_BOT_SLACK_HOOK_URL =
