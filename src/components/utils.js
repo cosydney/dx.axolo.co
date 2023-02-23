@@ -81,13 +81,13 @@ export async function updateSettingFromApp({
   user,
 }) {
   const usersId = organization.users?.map((user) => user.id)
-  // if (!usersId.includes(user.id) || setting.id !== organization.setting.id) {
-  //   messageInteraction({
-  //     type: 'error',
-  //     message: 'You are not allowed to update this setting',
-  //   })
-  //   return
-  // }
+  if (!usersId.includes(user.id) || setting.id !== organization.setting.id) {
+    messageInteraction({
+      type: 'error',
+      message: 'You are not allowed to update this setting',
+    })
+    return
+  }
   const oldValue = setting[key]
   try {
     dispatch(updateSetting({ ...setting, [key]: value }))
