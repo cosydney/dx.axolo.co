@@ -11,17 +11,17 @@ export const PrivateRoute = () => {
   const auth = user?.jwt?.length > 0
 
   // handling is users need to answer a survey
-  if (auth) {
-    const needsToAnswer = userNeedsToAnswerSurvey(user)
-    if (needsToAnswer) {
-      return (
-        <AppLayout>
-          <ModalQuestion />
-          <Outlet />
-        </AppLayout>
-      )
-    }
-  }
+  // if (auth) {
+  //   const needsToAnswer = userNeedsToAnswerSurvey(user)
+  //   if (needsToAnswer) {
+  //     return (
+  //       <AppLayout>
+  //         <ModalQuestion />
+  //         <Outlet />
+  //       </AppLayout>
+  //     )
+  //   }
+  // }
 
   return auth ? (
     <AppLayout>
