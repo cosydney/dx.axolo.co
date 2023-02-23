@@ -22,7 +22,11 @@ export default function Onboarding() {
       href: '/questions/schedule',
       status: 'upcoming',
     },
-    { name: 'Look at answers', href: '/answers/results', status: 'upcoming' },
+    {
+      name: 'Checkout answers',
+      href: '/answers/results',
+      status: 'upcoming',
+    },
   ]
 
   if (step1 === true) {
@@ -34,7 +38,6 @@ export default function Onboarding() {
     steps[1].status = 'complete'
     steps[2].status = 'current'
   }
-
   if (step3 === true) {
     steps[0].status = 'complete'
     steps[1].status = 'complete'
@@ -92,7 +95,7 @@ export default function Onboarding() {
             className="m-2 mb-6"
             onClick={() => dispatch(updateOnboarding({ closed: false }))}
           >
-            <strong>3 Step Onboarding</strong>
+            <strong>3 Steps Onboarding</strong>
           </h1>
           <ul className="m-2">
             {steps.map((step) => (
@@ -148,8 +151,8 @@ export default function Onboarding() {
           </ul>
           {showCongrats && (
             <>
-              <p className="ml-3 text-sm font-medium text-gray-500 group-hover:text-gray-900">
-                🎉 Congrats you finished
+              <p className="ml-3 flex text-sm font-medium text-gray-500 group-hover:text-gray-900">
+                <p>🎉</p> <p pl-8>&nbsp;&nbsp;&nbsp;Congrats you finished</p>
               </p>
             </>
           )}
