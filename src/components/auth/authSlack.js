@@ -84,7 +84,7 @@ export default function SlackAuth({ type = 'slack' }) {
       //   email: user.email,
       // })
 
-      const onboardedMembers = members.filter((m) => m.isActive)
+      const onboardedMembers = members.filter((m) => m?.isActive)
       if (!(onboardedMembers?.length > 0)) {
         navigate('/team/manage')
       } else {

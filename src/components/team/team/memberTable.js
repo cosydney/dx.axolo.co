@@ -7,6 +7,7 @@ import { Organization } from '../../../reducers/organizationReducer'
 import messageInteraction from '../../messageInteraction'
 import { classNames, useAxiosWithHeader } from '../../utils'
 import SeachMemberInput from './searchMemberInput'
+import { updateOnboarding } from '../../../reducers/onboardingReducer'
 
 export default function MemberSettingTable() {
   const members = useSelector(Member.selectors.getMember)
@@ -60,6 +61,14 @@ export default function MemberSettingTable() {
       await axios.put(
         `${URLBACK}members/onoffboard?orgId=${organization.id}&memberId=${person.id}&action=${action}`,
       )
+      // This is to handle the onboarding step1
+      const activeCount = newMemberState.list?.filter((m) => m?.isActive === true).length
+      if (activeCount >= 2) {
+        dispatch(updateOnboarding({ step1: true }))
+      } else {
+        dispatch(updateOnboarding({ step1: false }))
+      }
+
       hide()
     } catch (e) {
       dispatch(updateMember({ ...members }))
@@ -151,36 +160,39 @@ export default function MemberSettingTable() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {memberData?.map((person) => (
-                  <tr key={person.email}>
-                    <td className="relative whitespace-nowrap pl-4  text-left text-sm font-medium sm:pl-6 ">
-                      <div className="flex items-center  ">
-                        <div className="h-10 w-10 flex-shrink-0 ">
-                          <img
-                            className="h-10 w-10 rounded-full"
-                            src={person.avatarUrl}
-                            alt=""
-                          />
-                        </div>
-                        <div className="ml-4 ">
-                          <div className="font-medium text-gray-900">
-                            {person.username}
+                {memberData?.map(
+                  (person) =>
+                    person && (
+                      <tr key={person.email}>
+                        <td className="relative whitespace-nowrap pl-4  text-left text-sm font-medium sm:pl-6 ">
+                          <div className="flex items-center  ">
+                            <div className="h-10 w-10 flex-shrink-0 ">
+                              <img
+                                className="h-10 w-10 rounded-full"
+                                src={person?.avatarUrl}
+                                alt=""
+                              />
+                            </div>
+                            <div className="ml-4 ">
+                              <div className="font-medium text-gray-900">
+                                {person.username}
+                              </div>
+                              <div className="text-gray-500">{person.email}</div>
+                            </div>
                           </div>
-                          <div className="text-gray-500">{person.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <StatusBadgeMember isActive={person.isActive} />
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {person.isActive ? person.role?.name : null}
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
-                      <ActionMemberTableComponent person={person} />
-                    </td>
-                  </tr>
-                ))}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <StatusBadgeMember isActive={person.isActive} />
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          {person.isActive ? person.role?.name : null}
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
+                          <ActionMemberTableComponent person={person} />
+                        </td>
+                      </tr>
+                    ),
+                )}
               </tbody>
             </table>
           </div>

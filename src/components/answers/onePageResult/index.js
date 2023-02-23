@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { capitalize } from 'lodash'
 import { Sequence } from '../../../reducers/sequenceReducer'
@@ -6,12 +6,19 @@ import MainAppDiv from '../../Layout/mainAppDiv'
 import { AppHeader, AppSecondaryHeader, QuestionHeading } from '../../utils'
 import ScaleAnswer from './scaleAnswer'
 import TextAnswer from './textAnswer'
+import { useEffectOnce } from 'react-use'
+import { updateOnboarding } from '../../../reducers/onboardingReducer'
 
 export default function OnePageResult() {
   const sequences = useSelector(Sequence.selectors.getSequence)
   const location = useLocation()
   const sequencedId = location?.pathname?.split('/')?.[3]
   const thisSequence = sequences?.list?.find((seq) => seq.id?.toString() === sequencedId)
+  const dispatch = useDispatch()
+
+  useEffectOnce(() => {
+    dispatch(updateOnboarding({ step3: true }))
+  })
 
   // the following code creates an object such as this: {topic : [{question: [array of answers]}}}
   // allAnswersPerTopic = {

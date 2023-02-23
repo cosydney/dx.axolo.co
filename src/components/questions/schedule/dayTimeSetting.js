@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Setting } from '../../../reducers/settingReducer'
 import { Organization } from '../../../reducers/organizationReducer'
 import { User } from '../../../reducers/userReducer'
+import { updateOnboarding } from '../../../reducers/onboardingReducer'
 
 export default function DayTimeSetting() {
   const setting = useSelector(Setting.selectors.getSetting)
@@ -48,6 +49,7 @@ export default function DayTimeSetting() {
       axiosWithHeader: axios,
       user,
     })
+    dispatch(updateOnboarding({ step2: true }))
   }
 
   return (
