@@ -117,7 +117,7 @@ export default function SequenceTable() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {sortedSequences?.length === 0 ? (
+                  {sortedSequences?.length >= 0 ? (
                     <PopulatedSequences />
                   ) : (
                     <EmptySequence />
