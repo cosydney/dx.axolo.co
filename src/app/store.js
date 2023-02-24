@@ -9,6 +9,7 @@ import { organizationSlice } from '../reducers/organizationReducer'
 import { sequenceSlice } from '../reducers/sequenceReducer'
 import { questionSlice } from '../reducers/questionReducer'
 import { currentSequenceSlice } from '../reducers/currentSequenceReducer'
+import { onboardingSlice } from '../reducers/onboardingReducer'
 
 const reducers = combineReducers({
   user: userReducer,
@@ -18,6 +19,7 @@ const reducers = combineReducers({
   sequence: sequenceSlice.reducer,
   question: questionSlice.reducer,
   currentSequence: currentSequenceSlice.reducer,
+  onboarding: onboardingSlice.reducer,
 })
 
 const persistConfig = {

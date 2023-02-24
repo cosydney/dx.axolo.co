@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../header/header'
 import HomeFooter from '../homeFooter'
+import Onboarding from '../onboarding'
 
 export default function AppLayout({ children, items }) {
   return (
@@ -12,6 +13,7 @@ export default function AppLayout({ children, items }) {
             <div className="rounded-lg bg-white px-10 py-6 shadow ">{children}</div>
           </div>
         </main>
+        <Onboarding></Onboarding>
         <HomeFooter />
       </div>
     </div>

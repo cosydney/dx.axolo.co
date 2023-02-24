@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Setting } from '../../../reducers/settingReducer'
 import { Organization, updateOrganization } from '../../../reducers/organizationReducer'
 import { User } from '../../../reducers/userReducer'
+import { updateOnboarding } from '../../../reducers/onboardingReducer'
 import TimeZone from './timeZone'
 import { URLBACK } from '../../../env'
 import messageInteraction from '../../messageInteraction'
@@ -51,6 +52,7 @@ export default function DayTimeSetting() {
       axiosWithHeader: axios,
       user,
     })
+    dispatch(updateOnboarding({ step2: true }))
   }
 
   async function handleTimeZoneChange(timeZone) {
