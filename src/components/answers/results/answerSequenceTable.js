@@ -63,7 +63,7 @@ export default function SequenceTable() {
   const EmptySequence = () => {
     return (
       <tr>
-        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 sm:pl-6">
           Keep an eye out for your results, or take a look
           <a
             href="https://dx.axolo.co/demo"
