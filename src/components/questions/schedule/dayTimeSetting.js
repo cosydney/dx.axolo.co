@@ -6,9 +6,12 @@ import { AppSecondaryHeader, updateSettingFromApp, useAxiosWithHeader } from '..
 import DaySelector from './daySelect'
 import { useDispatch, useSelector } from 'react-redux'
 import { Setting } from '../../../reducers/settingReducer'
-import { Organization } from '../../../reducers/organizationReducer'
+import { Organization, updateOrganization } from '../../../reducers/organizationReducer'
 import { User } from '../../../reducers/userReducer'
 import { updateOnboarding } from '../../../reducers/onboardingReducer'
+import TimeZone from './timeZone'
+import { URLBACK } from '../../../env'
+import messageInteraction from '../../messageInteraction'
 
 export default function DayTimeSetting() {
   const setting = useSelector(Setting.selectors.getSetting)
@@ -52,6 +55,26 @@ export default function DayTimeSetting() {
     dispatch(updateOnboarding({ step2: true }))
   }
 
+  async function handleTimeZoneChange(timeZone) {
+    const oldTimezone = organization.timeZone
+    try {
+      dispatch(updateOrganization({ ...organization, timeZone }))
+      await axios.put(
+        `${URLBACK}organizations/update-timezone?orgId=${organization.id}`,
+        {
+          timeZone,
+        },
+      )
+    } catch (e) {
+      dispatch(updateOrganization({ ...organization, timeZone: oldTimezone }))
+      messageInteraction({
+        type: 'error',
+        message: `Error updating your timezone.`,
+      })
+      console.log('Error updating timezone', e)
+    }
+  }
+
   return (
     <div className="">
       <AppSecondaryHeader>Day & time</AppSecondaryHeader>
@@ -65,6 +88,12 @@ export default function DayTimeSetting() {
           onChange={onChangeTime}
           value={dayjs(selectedTime, format)}
           minuteStep={15}
+        />
+        <TimeZone
+          timeZone={organization.timeZone}
+          width={220}
+          disabled={false}
+          handleTimeZoneChange={handleTimeZoneChange}
         />
       </div>
     </div>

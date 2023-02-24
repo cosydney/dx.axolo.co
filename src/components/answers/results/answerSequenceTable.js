@@ -14,6 +14,70 @@ export default function SequenceTable() {
   const sortedSequences = cloneDeep(sequences?.list)
   sortedSequences.reverse()
 
+  const PopulatedSequences = () => {
+    return sortedSequences?.map((sequence, i) => {
+      const surveySent = sequence.surveyRequests?.length
+      const surveyAnswered = sequence.surveyRequests?.filter(
+        (survey) => survey.answered,
+      ).length
+      let status = sequence.status
+      // if all the survey have been answered of the last sequence, the sequence is completed
+      if (i === 0 && surveySent === surveyAnswered) {
+        status = 'completed'
+      }
+      return (
+        <tr
+          key={i}
+          onClick={() => navigate('/answers/results/' + sequence.id)}
+          className={classNames(
+            'hover:cursor-pointer hover:bg-gray-200',
+            i % 2 === 0 ? '' : 'bg-gray-50 ',
+          )}
+        >
+          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+            <ThemeBadge name={sequence?.theme?.name} />
+          </td>
+          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+            {moment(sequence.launchDate).format('MMMM Do YYYY')}
+          </td>
+          {/* here it is a bit more complicated than anticipated. Should we send every questions, topics to the front page for every user? we need it to know if everyone answered everything */}
+          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+            <StatusBadge name={status} />{' '}
+          </td>
+          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+            {surveyAnswered}/{surveySent}
+          </td>
+          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+            {/* {sequence.status === 'ongoing' ? (
+                <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                  Mark as completed
+                  <span className="sr-only">, {sequence.name}</span>
+                </a>
+              ) : null} */}
+          </td>
+        </tr>
+      )
+    })
+  }
+
+  const EmptySequence = () => {
+    return (
+      <tr>
+        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 sm:pl-6">
+          Keep an eye out for your results, or take a look
+          <a
+            href="https://dx.axolo.co/demo"
+            rel="noreferrer"
+            className="mx-1 text-indigo-600 underline hover:text-indigo-900"
+            target="_blank"
+          >
+            at our demo
+          </a>
+          while you wait!
+        </td>
+      </tr>
+    )
+  }
   return (
     <div className="">
       <div className="mt-8 flex flex-col">
@@ -53,49 +117,11 @@ export default function SequenceTable() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {sortedSequences?.map((sequence, i) => {
-                    const surveySent = sequence.surveyRequests?.length
-                    const surveyAnswered = sequence.surveyRequests?.filter(
-                      (survey) => survey.answered,
-                    ).length
-                    let status = sequence.status
-                    // if all the survey have been answered of the last sequence, the sequence is completed
-                    if (i === 0 && surveySent === surveyAnswered) {
-                      status = 'completed'
-                    }
-                    return (
-                      <tr
-                        key={i}
-                        onClick={() => navigate('/answers/results/' + sequence.id)}
-                        className={classNames(
-                          'hover:cursor-pointer hover:bg-gray-200',
-                          i % 2 === 0 ? '' : 'bg-gray-50 ',
-                        )}
-                      >
-                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                          <ThemeBadge name={sequence?.theme?.name} />
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {moment(sequence.launchDate).format('MMMM Do YYYY')}
-                        </td>
-                        {/* here it is a bit more complicated than anticipated. Should we send every questions, topics to the front page for every user? we need it to know if everyone answered everything */}
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          <StatusBadge name={status} />{' '}
-                        </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {surveyAnswered}/{surveySent}
-                        </td>
-                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                          {/* {sequence.status === 'ongoing' ? (
-                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                              Mark as completed
-                              <span className="sr-only">, {sequence.name}</span>
-                            </a>
-                          ) : null} */}
-                        </td>
-                      </tr>
-                    )
-                  })}
+                  {sortedSequences?.length >= 0 ? (
+                    <PopulatedSequences />
+                  ) : (
+                    <EmptySequence />
+                  )}
                 </tbody>
               </table>
             </div>

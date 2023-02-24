@@ -16,7 +16,7 @@ export default function DaySelector({ selectedDay, onChangeDay }) {
   const value = days.find((day) => day.name === selectedDay)
   return (
     <Combobox as="div" value={value} onChange={onChangeDay}>
-      <div className="relative mx-2 mt-1 w-40">
+      <div className="relative mx-2 w-40">
         <Combobox.Input
           className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm"
           displayValue={(person) => person?.name}
