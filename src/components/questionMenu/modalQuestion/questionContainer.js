@@ -131,7 +131,11 @@ export default function QuestionContainer() {
       }
       dispatch(updateCurrentSequence({ questions: currentQuestions, step: step + 1 }))
     } catch (e) {
-      console.log('errororororororo', e)
+      messageInteraction({
+        type: 'error',
+        content: 'Error saving your answer',
+      })
+      console.log('Error saving your answer', e.message, e)
     }
   }
 

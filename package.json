@@ -18,6 +18,7 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.41",
     "posthog-js": "^1.43.1",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",

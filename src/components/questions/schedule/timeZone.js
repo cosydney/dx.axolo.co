@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import { Select } from 'antd'
 import { useSelector } from 'react-redux'
 import { useEffect } from 'react'
