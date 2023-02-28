@@ -13,7 +13,27 @@ export default function SequenceTable() {
   const sortedSequences = cloneDeep(sequences?.list)
   sortedSequences.reverse()
 
+  const EmptySequence = () => {
+    return (
+      <tr>
+        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 sm:pl-6">
+          Keep an eye out for your results, or take a look
+          <a
+            href="https://dx.axolo.co/demo"
+            rel="noreferrer"
+            className="mx-1 text-indigo-600 underline hover:text-indigo-900"
+            target="_blank"
+          >
+            at our demo
+          </a>
+          while you wait!
+        </td>
+      </tr>
+    )
+  }
+
   const PopulatedSequences = () => {
+    if (!(sortedSequences?.length > 0)) return <EmptySequence />
     return sortedSequences?.map((sequence, i) => {
       const surveySent = sequence.surveyRequests?.length
       const surveyAnswered = sequence.surveyRequests?.filter(
@@ -59,26 +79,6 @@ export default function SequenceTable() {
     })
   }
 
-  const EmptySequence = () => {
-    return (
-      <tr>
-        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-700 sm:pl-6">
-          Keep an eye out for your results, or take a look
-          <a
-            href="https://dx.axolo.co/demo"
-            rel="noreferrer"
-            className="mx-1 text-indigo-600 underline hover:text-indigo-900"
-            target="_blank"
-          >
-            at our demo
-          </a>
-          while you wait!
-        </td>
-      </tr>
-    )
-  }
-
-  console.log('sortedSequences', sortedSequences?.length)
   return (
     <div className="">
       <div className="mt-8 flex flex-col">
@@ -118,11 +118,7 @@ export default function SequenceTable() {
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  {sortedSequences?.length >= 0 ? (
-                    <PopulatedSequences />
-                  ) : (
-                    <EmptySequence />
-                  )}
+                  <PopulatedSequences />
                 </tbody>
               </table>
             </div>
