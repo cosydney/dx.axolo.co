@@ -24,6 +24,7 @@ export const organizationSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    console.log('here')
     builder.addCase(User.actions.logout, (_) => initialState)
   },
 })

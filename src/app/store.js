@@ -11,7 +11,7 @@ import { questionSlice } from '../reducers/questionReducer'
 import { currentSequenceSlice } from '../reducers/currentSequenceReducer'
 import { onboardingSlice } from '../reducers/onboardingReducer'
 
-const reducers = combineReducers({
+const appReducer = combineReducers({
   user: userReducer,
   setting: settingSlice.reducer,
   member: memberSlice.reducer,
@@ -22,12 +22,21 @@ const reducers = combineReducers({
   onboarding: onboardingSlice.reducer,
 })
 
+const rootReducer = (state, action) => {
+  console.log('action', action)
+  if (action.type === 'LOGOUT') {
+    localforage.removeItem('persist:root')
+    return appReducer(undefined, action)
+  }
+  return appReducer(state, action)
+}
+
 const persistConfig = {
   key: 'root',
   storage: localforage,
 }
 
-const persistedReducer = persistReducer(persistConfig, reducers)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
   reducer: persistedReducer,
