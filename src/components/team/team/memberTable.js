@@ -30,7 +30,7 @@ export default function MemberSettingTable() {
 
   useEffect(() => {
     setMemberData(sortedMembers)
-  }, [members?.list])
+  }, [members?.list, sortedMembers])
 
   const StatusBadgeMember = ({ isActive }) => {
     return (
@@ -123,7 +123,7 @@ export default function MemberSettingTable() {
       return person
     }).filter((person) => !!person)
     setMemberData(filteredData)
-  }, [searchMemberInput, members.list])
+  }, [searchMemberInput, members.list, sortedMembers])
 
   return (
     <div className="mt-8 flex flex-col">
