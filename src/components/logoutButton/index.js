@@ -5,7 +5,7 @@ import { User } from '../../reducers/userReducer'
 export const LogOutButton = () => {
   const dispatch = useDispatch()
   return (
-    <Link onClick={() => dispatch(User.actions.logout({}))} to="/">
+    <Link onClick={() => dispatch({ type: 'LOGOUT' })} to="/">
       <button
         to={`/`}
         type="primary"
