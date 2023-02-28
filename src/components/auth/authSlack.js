@@ -100,6 +100,11 @@ export default function SlackAuth({ type = 'slack' }) {
         setError('Same email different workspace.')
         return
       }
+      console.log('e?.response?.data?.error?', e?.response?.data?.error)
+      if (e?.response?.data?.error?.includes('No token found for this team')) {
+        setError('No team found for your Slack account, try Add to Slack instead.')
+        return
+      }
 
       if (typeof e?.response?.data?.message === 'string') {
         setError(e?.response?.data?.message)
