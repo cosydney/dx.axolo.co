@@ -80,7 +80,6 @@ export async function updateSettingFromApp({
   user,
 }) {
   const oldValue = setting[key]
-  console.log('oldValue', setting[key], key)
   try {
     dispatch(updateSetting({ ...setting, [key]: value }))
     await axiosWithHeader.put(`${URLBACK}settings/${setting.id}`, {

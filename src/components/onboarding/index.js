@@ -66,7 +66,6 @@ export default function Onboarding() {
 
   const onClose = async () => {
     dispatch(updateOnboarding({ closed: true }))
-    console.log("I'm closing", step1, step2, step3)
     // if he finished all steps we close this forever
     if (step1 && step2 && step3) {
       onFinish()
