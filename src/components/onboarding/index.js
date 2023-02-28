@@ -5,6 +5,7 @@ import { updateSettingFromApp, useAxiosWithHeader } from '../utils'
 import { Organization } from '../../reducers/organizationReducer'
 import { User } from '../../reducers/userReducer'
 import { Setting } from '../../reducers/settingReducer'
+import { useNavigate } from 'react-router-dom'
 
 export default function Onboarding() {
   const onboarding = useSelector(OnboardingState.selectors.getOnboarding)
@@ -12,13 +13,14 @@ export default function Onboarding() {
   const setting = useSelector(Setting.selectors.getSetting)
   const user = useSelector(User.selectors.selectUser)
   const axios = useAxiosWithHeader()
+  const navigate = useNavigate()
 
   let { step1, step2, step3, closed, finished } = onboarding
   const dispatch = useDispatch()
   const steps = [
-    { name: 'Onboard developers', href: '/team/manage', status: 'current' },
+    { name: 'Onboard your developers', href: '/team/manage', status: 'current' },
     {
-      name: 'Set up a time to send questions',
+      name: 'Schedule the time of your survey',
       href: '/questions/schedule',
       status: 'upcoming',
     },
@@ -33,13 +35,10 @@ export default function Onboarding() {
     steps[1].status = 'current'
   }
   if (step2 === true) {
-    steps[0].status = 'complete'
     steps[1].status = 'complete'
     steps[2].status = 'current'
   }
   if (step3 === true) {
-    steps[0].status = 'complete'
-    steps[1].status = 'complete'
     steps[2].status = 'complete'
   }
 
@@ -50,14 +49,6 @@ export default function Onboarding() {
 
   if (finished || organization?.setting?.finishedOnboarding) {
     return null
-  }
-
-  const onClose = async () => {
-    dispatch(updateOnboarding({ closed: true }))
-    // if he finished all steps we close this forever
-    if (step1 && step2 && step3) {
-      onFinish()
-    }
   }
 
   const onFinish = async () => {
@@ -73,34 +64,46 @@ export default function Onboarding() {
     dispatch(updateOnboarding({ finished: true }))
   }
 
+  const onClose = async () => {
+    dispatch(updateOnboarding({ closed: true }))
+    console.log("I'm closing", step1, step2, step3)
+    // if he finished all steps we close this forever
+    if (step1 && step2 && step3) {
+      onFinish()
+    }
+  }
+
   return (
     <>
       {closed ? (
         <div
           onClick={() => dispatch(updateOnboarding({ closed: false }))}
-          className="fixed bottom-0 left-0 m-4 cursor-pointer rounded-lg bg-gray-200 shadow-lg"
+          className="fixed bottom-0 left-0 m-4 cursor-pointer rounded-lg bg-gray-100 shadow-lg"
         >
           <p className="px-10 py-2">👋 Finish my onboarding</p>
         </div>
       ) : (
-        <div className="fixed bottom-0 left-0 m-4 rounded-lg bg-gray-200 p-2 shadow-lg">
-          <div className="absolute top-1 right-1 cursor-pointer" onClick={onClose}>
+        <div className="fixed bottom-0 left-0 m-4 rounded-lg bg-gray-100 p-2 shadow-lg">
+          <div
+            className="absolute top-1 right-1 cursor-pointer"
+            onClick={() => onClose()}
+          >
             <XCircleIcon
               className="text-grey-600 group-hover:text-grey-800 h-5 w-5"
               aria-hidden="true"
             />
           </div>
           <h1
-            className="m-2 mb-6"
+            className="m-2 mb-6 font-bold"
             onClick={() => dispatch(updateOnboarding({ closed: false }))}
           >
-            <strong>3 Steps Onboarding</strong>
+            Onboarding
           </h1>
           <ul className="m-2">
             {steps.map((step) => (
               <li key={step.name}>
                 {step.status === 'complete' ? (
-                  <a href={step.href} className="group">
+                  <button className="group" onClick={() => navigate(step.href)}>
                     <span className="mb-3 flex items-start">
                       <span className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center">
                         <CheckCircleIcon
@@ -112,10 +115,10 @@ export default function Onboarding() {
                         {step.name}
                       </span>
                     </span>
-                  </a>
+                  </button>
                 ) : step.status === 'current' ? (
-                  <a
-                    href={step.href}
+                  <button
+                    onClick={() => navigate(step.href)}
                     className="mb-3 flex items-start"
                     aria-current="step"
                   >
@@ -129,9 +132,9 @@ export default function Onboarding() {
                     <span className="ml-3 text-sm font-medium text-green-600">
                       {step.name}
                     </span>
-                  </a>
+                  </button>
                 ) : (
-                  <a href={step.href} className="group">
+                  <button onClick={() => navigate(step.href)} className="group">
                     <div className="mb-3 flex items-start">
                       <div
                         className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center"
@@ -143,7 +146,7 @@ export default function Onboarding() {
                         {step.name}
                       </p>
                     </div>
-                  </a>
+                  </button>
                 )}
               </li>
             ))}
