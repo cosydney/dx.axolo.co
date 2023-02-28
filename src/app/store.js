@@ -23,7 +23,6 @@ const appReducer = combineReducers({
 })
 
 const rootReducer = (state, action) => {
-  console.log('action', action)
   if (action.type === 'LOGOUT') {
     localforage.removeItem('persist:root')
     return appReducer(undefined, action)
