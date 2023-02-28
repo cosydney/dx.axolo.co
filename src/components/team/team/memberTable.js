@@ -8,9 +8,12 @@ import messageInteraction from '../../messageInteraction'
 import { classNames, useAxiosWithHeader } from '../../utils'
 import SeachMemberInput from './searchMemberInput'
 import { updateOnboarding } from '../../../reducers/onboardingReducer'
+import { User } from '../../../reducers/userReducer'
+import { Tooltip } from 'antd'
 
 export default function MemberSettingTable() {
   const members = useSelector(Member.selectors.getMember)
+  const user = useSelector(User.selectors.selectUser)
   const [searchMemberInput, setSearchMemberInput] = useState('')
   const axios = useAxiosWithHeader()
   const organization = useSelector(Organization.selectors.getOrganization)
@@ -81,28 +84,33 @@ export default function MemberSettingTable() {
     }
   }
 
-  const ActionMemberTableComponent = ({ person }) => {
+  const ActionMemberTableComponent = ({ disabled, person }) => {
     if (person.isActive) {
       return (
-        <button
-          href="#"
-          className=""
-          onClick={() => OnOffboardMember({ person, action: 'offboard' })}
-        >
-          <span className="text-red-800">Offboard</span>
-          <span className="sr-only">, {person.username}</span>
-        </button>
+        <Tooltip title={disabled ? 'Only admin can do this action' : ''}>
+          <button
+            href="#"
+            disabled={disabled}
+            onClick={() => OnOffboardMember({ person, action: 'offboard' })}
+          >
+            <span className="text-red-800">Offboard</span>
+            <span className="sr-only">, {person.username}</span>
+          </button>
+        </Tooltip>
       )
     }
     return (
-      <button
-        href="#"
-        className=""
-        onClick={() => OnOffboardMember({ person, action: 'onboard' })}
-      >
-        <span className="text-green-800">Onboard</span>
-        <span className="sr-only">, {person.username}</span>
-      </button>
+      <Tooltip title={disabled ? 'Only admin can do this action' : ''}>
+        <button
+          href="#"
+          className=""
+          disabled={disabled}
+          onClick={() => OnOffboardMember({ person, action: 'onboard' })}
+        >
+          <span className="text-green-800">Onboard</span>
+          <span className="sr-only">, {person.username}</span>
+        </button>
+      </Tooltip>
     )
   }
 
@@ -125,6 +133,8 @@ export default function MemberSettingTable() {
     setMemberData(filteredData)
   }, [searchMemberInput, members.list, sortedMembers])
 
+  const isMember = user?.role?.name === 'Member'
+  const shouldDisabledInput = isMember ? true : false
   return (
     <div className="mt-8 flex flex-col">
       <SeachMemberInput value={searchMemberInput} setValue={setSearchMemberInput} />
@@ -188,7 +198,10 @@ export default function MemberSettingTable() {
                           {person.isActive ? person.role?.name : null}
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
-                          <ActionMemberTableComponent person={person} />
+                          <ActionMemberTableComponent
+                            disabled={shouldDisabledInput}
+                            person={person}
+                          />
                         </td>
                       </tr>
                     ),
