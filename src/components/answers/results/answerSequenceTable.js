@@ -2,7 +2,6 @@ import { cloneDeep } from 'lodash'
 import moment from 'moment'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { Member } from '../../../reducers/memberReducer'
 import { Sequence } from '../../../reducers/sequenceReducer'
 import { classNames } from '../../utils'
 import StatusBadge from './statusBadge'
@@ -78,6 +77,8 @@ export default function SequenceTable() {
       </tr>
     )
   }
+
+  console.log('sortedSequences', sortedSequences?.length)
   return (
     <div className="">
       <div className="mt-8 flex flex-col">

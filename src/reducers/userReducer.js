@@ -8,6 +8,7 @@ let initialState = {
   name: '',
   avatarUrl: '',
   jwt: null,
+  surveyRequests: [],
 }
 
 export const slice = createSlice({
