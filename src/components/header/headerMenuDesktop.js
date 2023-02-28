@@ -13,7 +13,7 @@ export default function HeaderMenuDesktop({
   return (
     <div className="flex items-center px-2 lg:px-0">
       <div className="flex-shrink-0">
-        <img className="block h-14 w-14" src="/logo/22.png" alt="DX by Axolo" />
+        <img className="block h-8 " src="/logo/dx_no_bg_white.png" alt="DX by Axolo" />
       </div>
       <div className="hidden lg:ml-10 lg:block">
         <div className="flex space-x-4">
