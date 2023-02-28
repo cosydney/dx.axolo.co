@@ -143,7 +143,7 @@ export function userNeedsToAnswerSurvey(user) {
   const latestSurveyRequest = surveyRequests?.[0]
   // if user needs to answer a sequence
   if (
-    surveyRequests.length === 0 ||
+    !(surveyRequests.length > 0) ||
     latestSurveyRequest?.answered ||
     latestSurveyRequest?.sequence?.status === 'completed'
   )
