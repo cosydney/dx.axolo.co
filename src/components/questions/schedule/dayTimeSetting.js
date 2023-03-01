@@ -12,6 +12,7 @@ import { updateOnboarding } from '../../../reducers/onboardingReducer'
 import TimeZone from './timeZone'
 import { URLBACK } from '../../../env'
 import messageInteraction from '../../messageInteraction'
+import { useEffectOnce } from 'react-use'
 
 export default function DayTimeSetting() {
   const setting = useSelector(Setting.selectors.getSetting)
@@ -26,6 +27,10 @@ export default function DayTimeSetting() {
   const [selectedTime, setSelectedTime] = useState(setting?.launchSequenceTime || '14:00')
 
   const format = 'HH:mm'
+
+  useEffectOnce(() => {
+    dispatch(updateOnboarding({ step2: true }))
+  })
 
   async function onChangeDay(value) {
     setSelectedDay(value.name)
@@ -52,7 +57,6 @@ export default function DayTimeSetting() {
       axiosWithHeader: axios,
       user,
     })
-    dispatch(updateOnboarding({ step2: true }))
   }
 
   async function handleTimeZoneChange(timeZone) {
