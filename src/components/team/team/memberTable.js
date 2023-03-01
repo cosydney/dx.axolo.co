@@ -87,7 +87,8 @@ export default function MemberSettingTable() {
   const ActionMemberTableComponent = ({ disabled, person }) => {
     if (person.isActive) {
       return (
-        <Tooltip title={disabled ? 'Only admin can do this action' : ''}>
+        <Tooltip title={disabled ? 'Only admins can do this action' : ''}>
+
           <button
             href="#"
             disabled={disabled}
