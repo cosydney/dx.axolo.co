@@ -18,6 +18,11 @@ export default function QuestionsTable() {
     )
   }
 
+  const clickOnEditOrDelete = (action) => {
+    setOpen(true)
+    window.analytics.tack(`tried to ${action} question`)
+  }
+
   const QuestionStyle = ({ style }) => {
     if (style === 'textInput') {
       return <span className="text-gray-500">Text Input</span>
@@ -92,13 +97,13 @@ export default function QuestionsTable() {
                               </td>
                               <td className="relative flex whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
                                 <button
-                                  onClick={() => setOpen(true)}
+                                  onClick={() => clickOnEditOrDelete('edit')}
                                   className="h-4 w-4 text-orange-600 hover:text-orange-900"
                                 >
                                   <PencilIcon></PencilIcon>
                                 </button>
                                 <button
-                                  onClick={() => setOpen(true)}
+                                  onClick={() => clickOnEditOrDelete('delete')}
                                   className="h-4 w-4 text-red-600 hover:text-red-900"
                                 >
                                   <TrashIcon />

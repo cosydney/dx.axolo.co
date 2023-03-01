@@ -78,11 +78,11 @@ export default function SlackAuth({ type = 'slack' }) {
           }),
         )
       }
-      // window.$crisp.push(['set', 'user:email', user.email])
-      // window.analytics.identify(user.email, {
-      //   name: user.name,
-      //   email: user.email,
-      // })
+      window.$crisp.push(['set', 'user:email', user.email])
+      window.analytics.identify(user.email, {
+        name: user.name,
+        email: user.email,
+      })
 
       const onboardedMembers = members.filter((m) => m?.isActive)
       if (!(onboardedMembers?.length > 0)) {
