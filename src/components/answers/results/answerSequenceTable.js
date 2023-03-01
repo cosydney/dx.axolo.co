@@ -47,7 +47,12 @@ export default function SequenceTable() {
       return (
         <tr
           key={i}
-          onClick={() => navigate('/answers/results/' + sequence.id)}
+          onClick={() => {
+            if (process.env.NODE_ENV === 'production') {
+              window.analytics.track('Sign out user')
+            }
+            navigate('/answers/results/' + sequence.id)
+          }}
           className={classNames(
             'hover:cursor-pointer hover:bg-gray-200',
             i % 2 === 0 ? '' : 'bg-gray-50 ',

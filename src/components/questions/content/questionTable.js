@@ -1,11 +1,14 @@
 import { useSelector } from 'react-redux'
 import { groupBy, capitalize } from 'lodash'
 import { Question } from '../../../reducers/questionReducer'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import ThemeBadge from '../../answers/results/themeBadge'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import ModalFeedback from '../../modalFeedback.js'
 
 export default function QuestionsTable() {
   const questions = useSelector(Question.selectors.getQuestion)
+  const [open, setOpen] = useState(false)
 
   const questionByThemeThenTopic = groupBy(questions?.list, 'topic.theme.name')
   for (const [theme, value] of Object.entries(questionByThemeThenTopic)) {
@@ -13,6 +16,11 @@ export default function QuestionsTable() {
       questionByThemeThenTopic[theme],
       'topic.title',
     )
+  }
+
+  const clickOnEditOrDelete = (action) => {
+    setOpen(true)
+    window.analytics.tack(`tried to ${action} question`)
   }
 
   const QuestionStyle = ({ style }) => {
@@ -87,14 +95,20 @@ export default function QuestionsTable() {
                               <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 <ThemeBadge name={theme} />
                               </td>
-                              <td className="relative whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
-                                <a
-                                  href="#"
-                                  className="text-indigo-600 hover:text-indigo-900"
+                              <td className="relative flex whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
+                                <button
+                                  onClick={() => clickOnEditOrDelete('edit')}
+                                  className="h-4 w-4 text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-0 "
                                 >
-                                  ... todo
+                                  <PencilIcon />
+                                </button>
+                                <button
+                                  onClick={() => clickOnEditOrDelete('delete')}
+                                  className="ml-1 h-4 w-4 text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-0"
+                                >
+                                  <TrashIcon />
                                   <span className="sr-only">, {question.name}</span>
-                                </a>
+                                </button>
                               </td>
                             </tr>
                           ),
@@ -105,6 +119,12 @@ export default function QuestionsTable() {
                 ))}
               </tbody>
             </table>
+            <ModalFeedback
+              open={open}
+              setOpen={setOpen}
+              modalTitle="Edit and delete questions are not available yet"
+              modalText="Your feedback is important to us. Please let us know what you would like to see in the future."
+            />
           </div>
         </div>
       </div>
