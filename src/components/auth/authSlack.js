@@ -15,6 +15,10 @@ import { updateQuestion } from '../../reducers/questionReducer'
 import { updateCurrentSequence } from '../../reducers/currentSequenceReducer'
 import { userNeedsToAnswerSurvey } from '../utils'
 import { cloneDeep } from 'lodash'
+import {
+  onboardingIsFinished,
+  setToDefaultOnboarding,
+} from '../../reducers/onboardingReducer'
 
 function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
   const questionsOfCurrentSequence = cloneDeep(
@@ -57,6 +61,13 @@ export default function SlackAuth({ type = 'slack' }) {
       dispatch(updateOrganization({ ...organization }))
       dispatch(updateSequence({ list: sequences }))
       dispatch(updateQuestion({ list: allQuestions }))
+
+      if (setting.finishedOnboarding) {
+        dispatch(onboardingIsFinished())
+      } else {
+        let step1 = members.filter((member) => member.isActive)?.length >= 2
+        dispatch(setToDefaultOnboarding(step1))
+      }
 
       const needsToAnswer = userNeedsToAnswerSurvey(user)
       if (needsToAnswer) {

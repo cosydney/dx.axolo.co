@@ -15,19 +15,27 @@ export default function Onboarding() {
   const axios = useAxiosWithHeader()
   const navigate = useNavigate()
 
-  let { step1, step2, step3, closed, finished } = onboarding
+  let { step1, step2, step3, step4, closed, finished } = onboarding
   const dispatch = useDispatch()
   const steps = [
-    { name: 'Onboard your developers', href: '/team/manage', status: 'current' },
+    { name: 'Onboard your developers', href: '/team/manage', status: 'current', id: 1 },
     {
       name: 'Schedule the time of your survey',
       href: '/questions/schedule',
       status: 'upcoming',
+      id: 2,
+    },
+    {
+      name: 'Launch your first sequence now',
+      href: '/answers/results',
+      status: 'upcoming',
+      id: 3,
     },
     {
       name: 'Checkout answers',
       href: '/answers/results',
       status: 'upcoming',
+      id: 4,
     },
   ]
   if (step1 === true) {
@@ -40,10 +48,14 @@ export default function Onboarding() {
   }
   if (step3 === true) {
     steps[2].status = 'complete'
+    steps[3].status = 'current'
+  }
+  if (step4 === true) {
+    steps[3].status = 'complete'
   }
 
   let showCongrats = false
-  if (step1 && step2 && step3) {
+  if (step1 && step2 && step3 && step4) {
     showCongrats = true
   }
 
@@ -67,7 +79,7 @@ export default function Onboarding() {
   const onClose = async () => {
     dispatch(updateOnboarding({ closed: true }))
     // if he finished all steps we close this forever
-    if (step1 && step2 && step3) {
+    if (step1 && step2 && step3 && step4) {
       onFinish()
     }
   }
@@ -125,8 +137,8 @@ export default function Onboarding() {
                       className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center"
                       aria-hidden="true"
                     >
-                      <span className="absolute h-4 w-4 rounded-full bg-green-200" />
-                      <span className="relative block h-2 w-2 rounded-full bg-green-600" />
+                      <span className="absolute h-4 w-4 animate-ping rounded-full bg-green-200" />
+                      <span className="relative block h-2 w-2 rounded-full bg-green-600 " />
                     </span>
                     <span className="ml-3 text-sm font-medium text-green-600">
                       {step.name}
