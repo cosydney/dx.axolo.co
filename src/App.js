@@ -17,8 +17,9 @@ window.$crisp.push(['safe', true])
 
 if (process.env.NODE_ENV !== 'development') {
   Sentry.init({
-    dsn: 'https://3af51e4ffe364600a1682a83a3a72413@o992721.ingest.sentry.io/6105769',
-    integrations: [new Integrations.BrowserTracing()],
+    dsn: 'https://d53ca6a0e4db49e584e943e37e4ecff3@o4504762492125184.ingest.sentry.io/4504762637549568',
+    integrations: [new Integrations.BrowserTracing(), new Sentry.Replay()],
+    replaysOnErrorSampleRate: 1.0,
 
     // We recommend adjusting this value in production, or using tracesSampler
     // for finer control
