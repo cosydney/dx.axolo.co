@@ -89,7 +89,7 @@ export async function updateSettingFromApp({
     dispatch(updateSetting({ ...setting, [key]: oldValue }))
     messageInteraction({
       type: 'error',
-      message: `Error updating your settings: ${key}`,
+      content: `Error updating your settings: ${key}.`,
     })
     console.log('Error updating settings', e)
   }

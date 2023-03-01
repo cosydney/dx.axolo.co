@@ -12,15 +12,18 @@ const days = [
   { id: 7, name: 'Sunday' },
 ]
 
-export default function DaySelector({ selectedDay, onChangeDay }) {
+export default function DaySelector({ disabled, selectedDay, onChangeDay }) {
   const value = days.find((day) => day.name === selectedDay)
+  let inputStyle =
+    'border-gray-300 bg-white w-full rounded-md border py-2 pl-3 pr-10 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm'
+  if (disabled) {
+    inputStyle =
+      'text-[#b8b8b8] border-[#d9d9d9] bg-[#f5f5f5] w-full rounded-md border py-2 pl-3 pr-10 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm'
+  }
   return (
-    <Combobox as="div" value={value} onChange={onChangeDay}>
+    <Combobox disabled={disabled} as="div" value={value} onChange={onChangeDay}>
       <div className="relative mx-2 w-40">
-        <Combobox.Input
-          className="w-full rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm"
-          displayValue={(person) => person?.name}
-        />
+        <Combobox.Input className={inputStyle} displayValue={(person) => person?.name} />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
         </Combobox.Button>

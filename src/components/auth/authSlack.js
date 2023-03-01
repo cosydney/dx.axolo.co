@@ -15,6 +15,10 @@ import { updateQuestion } from '../../reducers/questionReducer'
 import { updateCurrentSequence } from '../../reducers/currentSequenceReducer'
 import { userNeedsToAnswerSurvey } from '../utils'
 import { cloneDeep } from 'lodash'
+import {
+  onboardingIsFinished,
+  setToDefaultOnboarding,
+} from '../../reducers/onboardingReducer'
 
 function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
   const questionsOfCurrentSequence = cloneDeep(
@@ -58,6 +62,13 @@ export default function SlackAuth({ type = 'slack' }) {
       dispatch(updateSequence({ list: sequences }))
       dispatch(updateQuestion({ list: allQuestions }))
 
+      if (setting.finishedOnboarding) {
+        dispatch(onboardingIsFinished())
+      } else {
+        let step1 = members.filter((member) => member.isActive)?.length >= 2
+        dispatch(setToDefaultOnboarding(step1))
+      }
+
       const needsToAnswer = userNeedsToAnswerSurvey(user)
       if (needsToAnswer) {
         const questionsOfCurrentSequence = cloneDeep(
@@ -78,11 +89,11 @@ export default function SlackAuth({ type = 'slack' }) {
           }),
         )
       }
-      // window.$crisp.push(['set', 'user:email', user.email])
-      // window.analytics.identify(user.email, {
-      //   name: user.name,
-      //   email: user.email,
-      // })
+      window.$crisp.push(['set', 'user:email', user.email])
+      window.analytics.identify(user.email, {
+        name: user.name,
+        email: user.email,
+      })
 
       const onboardedMembers = members.filter((m) => m?.isActive)
       if (!(onboardedMembers?.length > 0)) {
@@ -98,6 +109,11 @@ export default function SlackAuth({ type = 'slack' }) {
         'Auth.form.error.email.taken.username'
       ) {
         setError('Same email different workspace.')
+        return
+      }
+      console.log('e?.response?.data?.error?', e?.response?.data?.error)
+      if (e?.response?.data?.error?.includes('No token found for this team')) {
+        setError('No team found for your Slack account, try Add to Slack instead.')
         return
       }
 

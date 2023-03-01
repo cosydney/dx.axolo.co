@@ -16,6 +16,7 @@ import { URLBACK } from '../../../env'
 import { Organization } from '../../../reducers/organizationReducer'
 import messageInteraction from '../../messageInteraction'
 import { updateUser, User } from '../../../reducers/userReducer'
+import { Sequence, updateSequence } from '../../../reducers/sequenceReducer'
 
 export default function QuestionContainer() {
   const organization = useSelector(Organization.selectors.getOrganization)
@@ -25,6 +26,7 @@ export default function QuestionContainer() {
   const [rating, setRating] = useState(0)
   const dispatch = useDispatch()
   const axios = useAxiosWithHeader()
+  const sequences = useSelector(Sequence.selectors.getSequence)
 
   const handleRating = (newRating) => {
     setRating(newRating)
@@ -39,6 +41,13 @@ export default function QuestionContainer() {
 
   const [completionBar, setCompletionbar] = useState(completion)
 
+  async function populateCurrentSequence() {
+    const { data: allSequences } = await axios.get(
+      `${URLBACK}sequences/populate-app?orgId=${organization.id}`,
+    )
+    console.log('allSequences', allSequences)
+    dispatch(updateSequence({ list: allSequences }))
+  }
   useEffect(() => {
     completion = (step / questions.length) * 100
     if (completion === 0) {
@@ -54,6 +63,7 @@ export default function QuestionContainer() {
           type: 'success',
           content: 'You have completed the survey! 🥳 Thank you.',
         })
+        populateCurrentSequence()
       }
     }
     setCompletionbar(completion)

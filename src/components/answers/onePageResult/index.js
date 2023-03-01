@@ -17,7 +17,7 @@ export default function OnePageResult() {
   const dispatch = useDispatch()
 
   useEffectOnce(() => {
-    dispatch(updateOnboarding({ step3: true }))
+    dispatch(updateOnboarding({ step4: true }))
   })
 
   // the following code creates an object such as this: {topic : [{question: [array of answers]}}}
