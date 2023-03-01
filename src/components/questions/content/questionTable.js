@@ -98,13 +98,13 @@ export default function QuestionsTable() {
                               <td className="relative flex whitespace-nowrap py-4 pl-3 pr-6 text-right text-sm font-medium">
                                 <button
                                   onClick={() => clickOnEditOrDelete('edit')}
-                                  className="h-4 w-4 text-orange-600 hover:text-orange-900"
+                                  className="h-4 w-4 text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-0 "
                                 >
-                                  <PencilIcon></PencilIcon>
+                                  <PencilIcon />
                                 </button>
                                 <button
                                   onClick={() => clickOnEditOrDelete('delete')}
-                                  className="h-4 w-4 text-red-600 hover:text-red-900"
+                                  className="ml-1 h-4 w-4 text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-0"
                                 >
                                   <TrashIcon />
                                   <span className="sr-only">, {question.name}</span>
