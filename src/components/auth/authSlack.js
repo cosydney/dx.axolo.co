@@ -20,7 +20,7 @@ import {
   setToDefaultOnboarding,
 } from '../../reducers/onboardingReducer'
 
-function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
+export function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
   const questionsOfCurrentSequence = cloneDeep(
     allQuestions.filter(
       (q) => q.topic?.theme?.id === user?.surveyRequests?.[0]?.sequence?.theme?.id,

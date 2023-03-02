@@ -66,16 +66,12 @@ export default function SequenceTable() {
             Your survey answers will appear here, launch your first sequence to get
             started
           </>
-          {onboarding.step3 ? (
-            <p>blop</p>
-          ) : (
-            <button
-              className="inline-flex items-center rounded-md border border-transparent bg-green-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-green-700 "
-              onClick={() => launchFirstSequence()}
-            >
-              Launch sequence
-            </button>
-          )}
+          <button
+            className="inline-flex items-center rounded-md border border-transparent bg-green-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-green-700 "
+            onClick={() => launchFirstSequence()}
+          >
+            Launch sequence
+          </button>
         </td>
       </tr>
     )
