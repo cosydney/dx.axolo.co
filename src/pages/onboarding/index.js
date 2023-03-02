@@ -26,7 +26,11 @@ export const SignIn = () => {
     if (jwt) {
       dispatch(User.actions.setUser({ jwt }))
     }
-    getOrg({ jwt, setError, dispatch, navigate }).then()
+    try {
+      getOrg({ jwt, setError, dispatch, navigate }).then()
+    } catch (error) {
+      setError(error)
+    }
   })
 
   const onboardedMembers = members?.list?.filter((m) => m?.isActive)
@@ -38,12 +42,12 @@ export const SignIn = () => {
     }
   }
 
-  if (error || organization.loading) {
+  if (error || organization.error) {
     return (
       <PublicLayout>
         <div className="m-5 flex flex-col items-center justify-center">
           <p>Error Signin you in, please try again or contact support</p>
-          <p>"{error}"</p>
+          <p>{error}</p>
           <div className={'mt-4'}>
             <LogOutButton></LogOutButton>
           </div>
