@@ -6,6 +6,7 @@ import getOrg from '../../components/auth/onboardUser'
 import { User } from '../../reducers/userReducer'
 import LoadingMessage from '../../components/loading'
 import { Member } from '../../reducers/memberReducer'
+import PublicLayout from '../PublicLayout'
 
 export const SignIn = () => {
   const location = useLocation()
@@ -42,8 +43,10 @@ export const SignIn = () => {
   }
 
   return (
-    <LoadingMessage
-      text={'Getting your organization information, loading questions...'}
-    />
+    <PublicLayout>
+      <LoadingMessage
+        text={'Getting your organization information, loading questions...'}
+      />
+    </PublicLayout>
   )
 }
