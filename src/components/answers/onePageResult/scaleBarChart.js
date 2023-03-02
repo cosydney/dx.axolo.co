@@ -50,21 +50,21 @@ export default function ScaleBarChart({ data }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
-        width={500}
+        width={600}
         height={300}
         data={data}
         margin={{
           // top: 5,
           // right: 30,
           left: 30,
-          bottom: 20,
+          bottom: 30,
         }}
       >
         <XAxis dataKey="intAnswer">
-          <Label value="Evaluation" offset={-10} position="insideBottom" />
+          <Label value="Evaluation" offset={-30} position="insideBottom" />
         </XAxis>
-        <YAxis domain={[0, 'dataMax']}>
-          <Label value="# devs" offset={-10} position="insideLeft" />
+        <YAxis domain={[0, 'dataMax']} width={100}>
+          <Label value="# devs" offset={-30} position="insideLeft" />
         </YAxis>
         <Tooltip content={renderTooltip} />
         {/* <Legend /> */}

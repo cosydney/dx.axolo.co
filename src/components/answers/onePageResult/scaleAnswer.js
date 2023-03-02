@@ -39,7 +39,7 @@ export default function ScaleAnswer({ answers }) {
 
   return (
     <div className="flex justify-center">
-      <div className=" max-h-[300px] w-[300px]">
+      <div className=" mb-10 max-h-[300px] w-[400px]">
         {/* when we also have the historic view  className="grid  grid-cols-2 gap-8" */}
         <div className={chartContainerCss}>
           <ScaleBarChart data={data} />
