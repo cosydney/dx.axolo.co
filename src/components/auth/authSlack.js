@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { Member } from '../../reducers/memberReducer'
 import { cloneDeep } from 'lodash'
 import LoadingMessage from '../loading'
-import PublickLayout from '../../pages/PublicLayout'
+import PublicLayout from '../../pages/PublicLayout'
 import getOrg from './onboardUser'
 
 export function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
@@ -104,5 +104,5 @@ export default function SlackAuth({ type = 'slack' }) {
     )
   }
 
-  return <PublickLayout>{error ? <ErrorMessage /> : <LoadingMessage />}</PublickLayout>
+  return <PublicLayout>{error ? <ErrorMessage /> : <LoadingMessage />}</PublicLayout>
 }
