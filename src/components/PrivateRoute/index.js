@@ -11,7 +11,6 @@ export const PrivateRoute = () => {
   const location = useLocation()
   const query = new URLSearchParams(location.search)
   const jwt = query.get('jwt')
-  const navigate = useNavigate()
 
   const user = useSelector(User.selectors.selectUser)
   const auth = user?.jwt?.length > 0

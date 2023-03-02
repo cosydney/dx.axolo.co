@@ -14,7 +14,8 @@ import {
 } from '../../reducers/onboardingReducer'
 import { findCurrentStepIfAlreadySomeAnswers } from './authSlack'
 
-export default async function getOrg({ jwt, setError, dispatch, navigate, setLoading }) {
+// Set loading is optional
+export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
   const axios = createAxios(jwt)
   try {
     let onboardingUrl = `${URLBACK}services/onboardUser`
@@ -62,7 +63,9 @@ export default async function getOrg({ jwt, setError, dispatch, navigate, setLoa
           id: user?.surveyRequests?.[0]?.sequence?.id,
         }),
       )
-      setLoading(false)
+      if (setLoading) {
+        setLoading(false)
+      }
     }
     window.$crisp.push(['set', 'user:email', user.email])
     window.analytics.identify(user.email, {

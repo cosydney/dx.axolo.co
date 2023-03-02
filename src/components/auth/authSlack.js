@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import { useEffectOnce, useLocation } from 'react-use'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { URLBACK } from '../../env'
-import { updateUser } from '../../reducers/userReducer'
+import { User, updateUser } from '../../reducers/userReducer'
 import { LogOutButton } from '../logoutButton'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { updateSetting } from '../../reducers/settingReducer'
-import { updateMember } from '../../reducers/memberReducer'
+import { Member, updateMember } from '../../reducers/memberReducer'
 import { updateOrganization } from '../../reducers/organizationReducer'
 import { updateSequence } from '../../reducers/sequenceReducer'
 import { updateQuestion } from '../../reducers/questionReducer'
@@ -20,6 +20,7 @@ import {
 } from '../../reducers/onboardingReducer'
 import LoadingMessage from '../loading'
 import PublickLayout from '../../pages/PublicLayout'
+import getOrg from './onboardUser'
 
 export function findCurrentStepIfAlreadySomeAnswers({ allQuestions, user, sequences }) {
   const questionsOfCurrentSequence = cloneDeep(
@@ -41,6 +42,8 @@ export default function SlackAuth({ type = 'slack' }) {
   const dispatch = useDispatch()
   const [error, setError] = useState(false)
   const navigate = useNavigate()
+  const user = useSelector(User.selectors.selectUser)
+  const members = useSelector(Member.selectors.getMember)
 
   const loggingUser = async () => {
     try {
@@ -49,7 +52,7 @@ export default function SlackAuth({ type = 'slack' }) {
         authUrl = `${URLBACK}services/auth/testAccount/callback`
       }
       const { data, status } = await Axios.get(authUrl)
-      const { user, jwt, organization, setting, members, sequences, allQuestions } = data
+      const { user, jwt } = data
       if (status !== 200) {
         console.log('STATUS NOT 200', status, data)
         setError(`Status: ${status}. Message: ${data.message}.`)
@@ -57,46 +60,12 @@ export default function SlackAuth({ type = 'slack' }) {
       }
 
       dispatch(updateUser({ ...user, jwt }))
-      dispatch(updateSetting({ ...setting }))
-      dispatch(updateMember({ list: members }))
-      dispatch(updateOrganization({ ...organization }))
-      dispatch(updateSequence({ list: sequences }))
-      dispatch(updateQuestion({ list: allQuestions }))
-
-      if (setting.finishedOnboarding) {
-        dispatch(onboardingIsFinished())
-      } else {
-        let step1 = members.filter((member) => member.isActive)?.length >= 2
-        dispatch(setToDefaultOnboarding(step1))
-      }
-
-      const needsToAnswer = userNeedsToAnswerSurvey(user)
-      if (needsToAnswer) {
-        const questionsOfCurrentSequence = cloneDeep(
-          allQuestions.filter(
-            (q) => q.topic?.theme?.id === user?.surveyRequests?.[0]?.sequence?.theme?.id,
-          ),
-        )
-        const step = findCurrentStepIfAlreadySomeAnswers({
-          allQuestions,
-          user,
-          sequences,
-        })
-        dispatch(
-          updateCurrentSequence({
-            questions: questionsOfCurrentSequence,
-            step,
-            id: user?.surveyRequests?.[0]?.sequence?.id,
-          }),
-        )
-      }
-      window.$crisp.push(['set', 'user:email', user.email])
-      window.analytics.identify(user.email, {
-        name: user.name,
-        email: user.email,
+      await getOrg({
+        jwt,
+        setError,
+        dispatch,
       })
-
-      const onboardedMembers = members.filter((m) => m?.isActive)
+      const onboardedMembers = members?.list?.filter((m) => m?.isActive)
       if (!(onboardedMembers?.length > 0)) {
         navigate('/team/manage')
       } else {
