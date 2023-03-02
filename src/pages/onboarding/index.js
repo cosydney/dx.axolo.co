@@ -7,12 +7,15 @@ import { User } from '../../reducers/userReducer'
 import LoadingMessage from '../../components/loading'
 import { Member } from '../../reducers/memberReducer'
 import PublicLayout from '../PublicLayout'
+import { Organization } from '../../reducers/organizationReducer'
+import { LogOutButton } from '../../components/logoutButton'
 
 export const SignIn = () => {
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const members = useSelector(Member.selectors.getMember)
+  const organization = useSelector(Organization.selectors.getOrganization)
 
   const query = new URLSearchParams(location.search)
   const jwt = query.get('jwt')
@@ -23,22 +26,29 @@ export const SignIn = () => {
     if (jwt) {
       dispatch(User.actions.setUser({ jwt }))
     }
-    getOrg({ jwt, setError, dispatch, navigate })
+    getOrg({ jwt, setError, dispatch, navigate }).then()
   })
 
   const onboardedMembers = members?.list?.filter((m) => m?.isActive)
-  if (!(onboardedMembers?.length > 0)) {
-    navigate('/team/manage')
-  } else {
-    navigate('/answers/results')
+  if (!organization.loading) {
+    if (!(onboardedMembers?.length > 0)) {
+      navigate('/team/manage')
+    } else {
+      navigate('/answers/results')
+    }
   }
 
-  if (error) {
+  if (error || organization.loading) {
     return (
-      <>
-        <p>Error Signin you in, please try again or contact support</p>
-        <p>{error}</p>
-      </>
+      <PublicLayout>
+        <div className="m-5 flex flex-col items-center justify-center">
+          <p>Error Signin you in, please try again or contact support</p>
+          <p>"{error}"</p>
+          <div className={'mt-4'}>
+            <LogOutButton></LogOutButton>
+          </div>
+        </div>
+      </PublicLayout>
     )
   }
 

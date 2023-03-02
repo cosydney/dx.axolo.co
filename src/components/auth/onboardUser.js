@@ -22,6 +22,13 @@ export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
 
     const { data, status } = await axios.get(onboardingUrl)
     const { user, jwt, organization, setting, members, sequences, allQuestions } = data
+    console.log('user', user)
+    if (!user.id) {
+      dispatch(updateOrganization({ error: true }))
+      setError(`Couldn't find user`)
+      return
+    }
+
     if (status !== 200) {
       console.log('STATUS', status, data)
       setError(`Status: ${status}. Message: ${data.message}.`)
