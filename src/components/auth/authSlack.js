@@ -3,21 +3,11 @@ import Axios from 'axios'
 import { useEffectOnce, useLocation } from 'react-use'
 import { useDispatch, useSelector } from 'react-redux'
 import { URLBACK } from '../../env'
-import { User, updateUser } from '../../reducers/userReducer'
+import { updateUser } from '../../reducers/userReducer'
 import { LogOutButton } from '../logoutButton'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { updateSetting } from '../../reducers/settingReducer'
-import { Member, updateMember } from '../../reducers/memberReducer'
-import { updateOrganization } from '../../reducers/organizationReducer'
-import { updateSequence } from '../../reducers/sequenceReducer'
-import { updateQuestion } from '../../reducers/questionReducer'
-import { updateCurrentSequence } from '../../reducers/currentSequenceReducer'
-import { userNeedsToAnswerSurvey } from '../utils'
+import { useNavigate } from 'react-router-dom'
+import { Member } from '../../reducers/memberReducer'
 import { cloneDeep } from 'lodash'
-import {
-  onboardingIsFinished,
-  setToDefaultOnboarding,
-} from '../../reducers/onboardingReducer'
 import LoadingMessage from '../loading'
 import PublickLayout from '../../pages/PublicLayout'
 import getOrg from './onboardUser'
@@ -42,7 +32,6 @@ export default function SlackAuth({ type = 'slack' }) {
   const dispatch = useDispatch()
   const [error, setError] = useState(false)
   const navigate = useNavigate()
-  const user = useSelector(User.selectors.selectUser)
   const members = useSelector(Member.selectors.getMember)
 
   const loggingUser = async () => {
