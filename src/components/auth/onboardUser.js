@@ -1,5 +1,4 @@
 import { cloneDeep } from 'lodash'
-import Axios from 'axios'
 import { URLBACK } from '../../env'
 import { updateUser } from '../../reducers/userReducer'
 import { updateSetting } from '../../reducers/settingReducer'
@@ -15,7 +14,7 @@ import {
 } from '../../reducers/onboardingReducer'
 import { findCurrentStepIfAlreadySomeAnswers } from './authSlack'
 
-export default async function getOrg({ jwt, setError, dispatch, navigate }) {
+export default async function getOrg({ jwt, setError, dispatch, navigate, setLoading }) {
   const axios = createAxios(jwt)
   try {
     let onboardingUrl = `${URLBACK}services/onboardUser`
@@ -63,6 +62,7 @@ export default async function getOrg({ jwt, setError, dispatch, navigate }) {
           id: user?.surveyRequests?.[0]?.sequence?.id,
         }),
       )
+      setLoading(false)
     }
     window.$crisp.push(['set', 'user:email', user.email])
     window.analytics.identify(user.email, {
@@ -70,12 +70,12 @@ export default async function getOrg({ jwt, setError, dispatch, navigate }) {
       email: user.email,
     })
 
-    const onboardedMembers = members.filter((m) => m?.isActive)
-    if (!(onboardedMembers?.length > 0)) {
-      navigate('/team/manage')
-    } else {
-      navigate('/answers/results')
-    }
+    // const onboardedMembers = members.filter((m) => m?.isActive)
+    // if (!(onboardedMembers?.length > 0)) {
+    //   navigate('/team/manage')
+    // } else {
+    //   navigate('/answers/results')
+    // }
   } catch (e) {
     console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
     console.log(e)
