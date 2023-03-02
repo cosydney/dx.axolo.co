@@ -24,6 +24,7 @@ export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
     const { user, jwt, organization, setting, members, sequences, allQuestions } = data
 
     if (!user.id) {
+      console.log('*******')
       dispatch(updateOrganization({ error: true }))
       setError(`Couldn't find user`)
       return
@@ -80,8 +81,12 @@ export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
       email: user.email,
     })
   } catch (e) {
-    console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
+    console.log('Error Onboarding Auth: ', e?.response?.data?.message, e)
     console.log(e)
+    if (e.message === 'Request failed with status code 401') {
+      setError('Session expired, please sign in again.')
+      return
+    }
     if (
       e?.response?.data?.message?.[0]?.messages[0]?.id ===
       'Auth.form.error.email.taken.username'
