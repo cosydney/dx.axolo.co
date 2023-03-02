@@ -13,8 +13,10 @@ import messageInteraction from '../../messageInteraction'
 import { classNames, useAxiosWithHeader } from '../../utils'
 import StatusBadge from './statusBadge'
 import ThemeBadge from './themeBadge'
+import { useState } from 'react'
 
 export default function SequenceTable() {
+  const [disabled, setDisabled] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const axios = useAxiosWithHeader()
@@ -22,11 +24,11 @@ export default function SequenceTable() {
   const questions = useSelector(Question.selectors.getQuestion)
   const user = useSelector(User.selectors.selectUser)
   const sequences = useSelector(Sequence.selectors.getSequence)
-  const onboarding = useSelector(OnboardingState.selectors.getOnboarding)
   const sortedSequences = cloneDeep(sequences?.list)
   sortedSequences.reverse()
 
   async function launchFirstSequence() {
+    setDisabled(true)
     try {
       const res = await axios.post(
         `${URLBACK}sequences/launch-initial-sequence?orgId=${organization.id}`,
@@ -51,6 +53,7 @@ export default function SequenceTable() {
       dispatch(updateUser({ ...user, surveyRequests: [surveyRequest] }))
     } catch (e) {
       console.log('Error sending your first sequence.', e.message, e)
+      setDisabled(false)
       messageInteraction({
         type: 'error',
         content: `Error sending your first sequence. Please try again or contact us.`,
@@ -67,6 +70,7 @@ export default function SequenceTable() {
             started
           </>
           <button
+            disabled={disabled}
             className="inline-flex items-center rounded-md border border-transparent bg-green-500 px-3 py-2 text-sm font-medium leading-4 text-white shadow-sm hover:bg-green-700 "
             onClick={() => launchFirstSequence()}
           >
