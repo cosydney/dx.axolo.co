@@ -29,7 +29,6 @@ export const SignIn = () => {
     try {
       getOrg({ jwt, setError, dispatch, navigate }).then()
     } catch (error) {
-      console.log('A***************************************')
       setError(error)
     }
   })

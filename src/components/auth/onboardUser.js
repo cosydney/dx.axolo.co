@@ -24,7 +24,6 @@ export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
     const { user, jwt, organization, setting, members, sequences, allQuestions } = data
 
     if (!user.id) {
-      console.log('*******')
       dispatch(updateOrganization({ error: true }))
       setError(`Couldn't find user`)
       return
