@@ -72,13 +72,6 @@ export default async function getOrg({ jwt, setError, dispatch, setLoading }) {
       name: user.name,
       email: user.email,
     })
-
-    // const onboardedMembers = members.filter((m) => m?.isActive)
-    // if (!(onboardedMembers?.length > 0)) {
-    //   navigate('/team/manage')
-    // } else {
-    //   navigate('/answers/results')
-    // }
   } catch (e) {
     console.log('Error with Slack Auth: ', e?.response?.data?.message, e)
     console.log(e)
